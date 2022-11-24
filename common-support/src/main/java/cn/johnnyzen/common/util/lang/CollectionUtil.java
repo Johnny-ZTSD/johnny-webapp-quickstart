@@ -1,8 +1,9 @@
 package cn.johnnyzen.common.util;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.*;
 
 /**
  * @project: JohnnyWebappQuickstart
@@ -12,6 +13,8 @@ import java.util.Map;
  */
 
 public class CollectionUtil {
+    private final static Logger LOG = LoggerFactory.getLogger(CollectionUtil.class);
+
     /**
      * 从 map 中模糊匹配 key 值
      * @param map
@@ -49,5 +52,72 @@ public class CollectionUtil {
             String mapBKey = (String) mapB.get(key);
             return mapAKey.compareToIgnoreCase(mapBKey);// compareToIgnoreCase : 不区分字母大小写
         } );
+    }
+
+    public static <T> T[] concat(T[] first, T[] second) {
+        T[] result = Arrays.copyOf(first, first.length + second.length);
+        System.arraycopy(second, 0, result, first.length, second.length);
+        return result;
+    }
+
+    /**
+     * 将Collection集合对象转为数组
+     *
+     * @param <T>
+     * @return null
+     * array(size>0)
+     */
+    public static <T> List collectionToList(Collection<T> collection) {
+        if (collection == null || collection.size() < 1) {
+            LOG.error("Fail to invoke!Because collection is null or its size<1!");
+            return null;
+        }
+        Iterator<T> iterator = collection.iterator();
+        List<T> list = new ArrayList<T>();
+        while (iterator.hasNext()) {
+            list.add(iterator.next());
+        }
+//        int size=collection.size();
+//        T [] array = (T[]) new Object[size];//初始化泛型数组
+//        for(int i=0;iterator.hasNext();i++){
+//            array[i] = iterator.next();
+//        }
+        return list;
+    }
+
+    /**
+     * 当前对象是否该列表里面的成员
+     *
+     * @param list
+     * @param item
+     */
+    public static <T> boolean isItemInList(List<T> list, T item) {
+        if (list == null) {
+            return false;
+        }
+        Iterator iterator = null;
+        iterator = list.iterator();
+        while (iterator.hasNext()) {
+            if (iterator.next().equals(item)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * array to list
+     * 注意事项: Arrays.asList()返回的对象是Arrays的内部类，对list的操作仍然反映在原数组上;故list是定长的，不支持add、remove操作
+     * @param array
+     * @param <T>
+     * @return
+     */
+    //public static <T> List<T> arrayToList(T ... array)
+    public static <T> List<T> arrayToList(T [] array){
+        return Arrays.asList(array);
+    }
+
+    public static <T> Object[] listToArray(List<T> list){
+        return list.toArray();
     }
 }

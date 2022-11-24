@@ -3,6 +3,8 @@ package cn.johnnyzen.common.util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.*;
+
 /**
  * @project: JohnnyWebappQuickstart
  * @author: Johnny
@@ -27,8 +29,5 @@ public class CharsetUtil {
         return (char) asciiValue;
     }
 
-    public static void main(String[] args) {
-        LOG.debug(String.valueOf(charToAsciiValue('A')));
-        LOG.debug(String.valueOf(asciiValueToChar(97)));
-    }
+
 }
