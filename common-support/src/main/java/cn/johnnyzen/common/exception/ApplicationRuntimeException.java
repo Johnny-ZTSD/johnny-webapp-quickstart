@@ -1,5 +1,7 @@
 package cn.johnnyzen.common.exception;
 
+import cn.johnnyzen.common.dto.ResponseCodeEnum;
+
 /**
  * @usage
  *  throw new ApplicationRuntimeException(LocalMessageUtil.get("common.handler.DispatchTaskHandler.deleteTask.error") + e.getMessage());
@@ -28,9 +30,9 @@ public class ApplicationRuntimeException extends RuntimeException {
         this.errorCode = errorCode;
     }
 
-    public ApplicationRuntimeException(ApplicationErrorCodeEnum errorCodeEnum){
-        this.errorMessage = errorCodeEnum.getErrorCode();
-        this.errorCode = errorCodeEnum.getErrorMessage();
+    public ApplicationRuntimeException(ResponseCodeEnum errorCodeEnum){
+        this.errorCode = String.valueOf(errorCodeEnum.getCode());
+        this.errorMessage = errorCodeEnum.getName();
     }
 
     public ApplicationRuntimeException(String errorMessage, String errorCode){

@@ -31,9 +31,12 @@ public enum ResponseCodeEnum implements Serializable {
     REQUEST_NOT_SUPPORT_ERROR(4100, "REQUEST_NOT_SUPPORT_ERROR","请求的服务不支持错误"),
     REQUEST_NOT_FOUND_ERROR(4101, "REQUEST_NOT_FOUND_ERROR","请求的服务不存在错误"),
     REQUEST_NO_DEVELOP_OR_DEVELOPING_ERROR(4102, "REQUEST_NO_DEVELOP_OR_DEVELOPING_ERROR","请求的服务成功，但尚未或尚在开发中"),
+
     PARAMETERS_NOT_VALID(4200, "PARAMETERS_NOT_VALID","参数无效"),
     PARAMETERS_UNCOMPLETE_ERROR(4201, "PARAMETERS_UNCOMPLETE_ERROR","参数不完整(少参)"),
     PARAMETERS_TYPE_OR_FORMAT_ERROR(4202, "PARAMETERS_TYPE_OR_FORMAT_ERROR","多参数中存在参数类型或参数格式错误"),
+    JINJA_TEMPLATE_TRANS_ERR(4203, "JINJA_TEMPLATE_TRANS_ERR", "Jinja模板转换错误"),
+
     //特设 认证类型枚举[4400-4499]
     AUTHORIZE_ERROR(4400,"AUTHORIZE_ERROR","认证错误"),
     UNAUTHORIZED_ERROR(4401, "UNAUTHORIZED_ERROR","未认证(签名错误)"),
@@ -53,8 +56,15 @@ public enum ResponseCodeEnum implements Serializable {
     SERVER_MAINTAINING_ERROR(5001, "SERVER_MAINTAINING_ERROR","服务器维护中"),
     //特设 网络类型故障枚举[5200-5299]
     SERVER_NET_ERROR(5200, "SERVER_NET_ERROR","网络故障类错误"),//[概括性地描述，概括范围 5200-5299]
+
     //特设 数据库类型故障枚举[5300-5399]
     SERVER_DB_ERROR(5300, "SERVER_DB_ERROR","数据库类错误"),//[概括性地描述，概括范围 5300-5399]
+    DATABASE_TYPE_NOT_SUPPORT(5301,"DATABASE_TYPE_NOT_SUPPORT","数据库类型不支持"),
+    QUERY_SQL_IS_EMPTY(5302,"QUERY_SQL_IS_EMPTY","查询SQL为空"),
+    DATABASE_QUERY_ERROR(5303,"DATABASE_QUERY_ERROR", "数据库查询错误"),
+    QUERY_RESULT_IS_EMPTY(5304, "QUERY_RESULT_IS_EMPTY", "查询结果为空"),
+    QUERY_ES_FAIL(5305, "QUERY_ES_FAIL", "查询ES失败"),
+
     //特设 IO类型故障枚举[5400-5499]
     SERVER_IO_ERROR(5400, "SERVER_IO_ERROR","文件或数据读写类错误"),//[概括性地描述，概括范围 5400-5499]
     //特设 第三方服务器枚举[5500-5599]
@@ -62,9 +72,9 @@ public enum ResponseCodeEnum implements Serializable {
 
     /**
      * @description 未知类型错误
-     * 6000-6999
+     * 9000-9999
      */
-    UNKNOWN_ERROR(6000, "UNKNOWN_ERROR","未知型错误");//[概括性地描述，概括范围 6001-6999]
+    UNKNOWN_ERROR(9000, "UNKNOWN_ERROR","未知型错误");//[概括性地描述，概括范围 6001-6999]
 
     /**
      * @property Status Code(状态码)
@@ -128,5 +138,14 @@ public enum ResponseCodeEnum implements Serializable {
 
     public String getExplain(){
         return this.explain;
+    }
+
+    @Override
+    public String toString() {
+        return "ResponseCodeEnum{" +
+                "code=" + code +
+                ", name='" + name + '\'' +
+                ", explain='" + explain + '\'' +
+                '}';
     }
 }

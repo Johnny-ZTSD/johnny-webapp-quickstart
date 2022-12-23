@@ -19,6 +19,10 @@ import java.io.Serializable;
 public class BasePage {
     private final static Logger LOG = LoggerFactory.getLogger(BasePage.class);
 
+    public final static String CURRENT_PAGE_NAME = "currentPage";
+
+    public final static String PAGE_SIZE_NAME = "pageSize";
+
     public final static Integer MIN_CURRENT_PAGE = 1;
 
     public final static Integer MAX_PAGE_SIZE = Integer.MAX_VALUE;

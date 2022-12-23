@@ -1,11 +1,10 @@
-package cn.seres.bd.dataservice.common.spring;
+package cn.johnnyzen.common.util.spring;
 
 import org.springframework.context.ApplicationContext;
 
 /**
- * @author 408675 (tai.zeng@seres.cn)
+ * @author johnnyzen
  * @version v1.0
- * @project bdp-data-service-parent
  * @create-date 2022/7/12 20:10
  * @description spring context 工具类
  */

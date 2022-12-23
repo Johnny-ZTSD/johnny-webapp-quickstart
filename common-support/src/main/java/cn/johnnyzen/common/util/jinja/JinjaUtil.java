@@ -1,10 +1,10 @@
-package cn.seres.bd.dataservice.common.utils;
+package cn.johnnyzen.common.util.jinja;
 
-import cn.seres.bd.dataservice.common.exception.BusinessException;
-import cn.seres.bd.dataservice.common.exception.CommonErrEnum;
-import cn.seres.bd.dataservice.common.exception.CommonException;
+import cn.johnnyzen.common.dto.ResponseCodeEnum;
+import cn.johnnyzen.common.exception.ApplicationRuntimeException;
 import com.hubspot.jinjava.Jinjava;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,8 +22,10 @@ import java.util.Properties;
  *  https://blog.csdn.net/a232884c/article/details/121982059
  *  https://wenku.baidu.com/view/152c14280440be1e650e52ea551810a6f524c806.html
  */
-@Slf4j
+
 public class JinjaUtil {
+    private static final Logger logger = LoggerFactory.getLogger(JinjaUtil.class);
+
     /**
      * 异常标志
      * @description 在通过本工具解析完成内容模板后，可通过判定结果文本中存在此异常标志。
@@ -53,11 +55,11 @@ public class JinjaUtil {
     public static String jinjaConvert(String template, Map properties, boolean isLog) {
         Jinjava jinjava = new Jinjava();
         if(isLog){
-            log.debug("template: {}", template);
+            logger.debug("template: {}", template);
         }
         String renderedResultText = jinjava.render(template, properties);
         if(isLog){
-            log.debug("renderedResultText: {}", renderedResultText);
+            logger.debug("renderedResultText: {}", renderedResultText);
         }
         checkExceptionInRenderedResultText(renderedResultText, template, properties);
         return renderedResultText;
@@ -72,16 +74,15 @@ public class JinjaUtil {
     private static final void checkExceptionInRenderedResultText(String renderedResultText, String template, Map properties){
         if(renderedResultText.contains(EXCEPTION_FLAG)){
             String errorMessageTemplate = "errorCode: %s,\n errorName: %s,\n errorCause: %s,\n template: %s,\n properties: %s";
-            throw new BusinessException(
-                    new BusinessException(
-                            CommonErrEnum.JINJA_TEMPLATE_TRANS_ERR.getCode(),
-                            CommonErrEnum.JINJA_TEMPLATE_TRANS_ERR.getMsg(),
+            throw new ApplicationRuntimeException(
+                    new ApplicationRuntimeException(
+                            errorMessageTemplate,
+                            ResponseCodeEnum.JINJA_TEMPLATE_TRANS_ERR.getCode(),
+                            ResponseCodeEnum.JINJA_TEMPLATE_TRANS_ERR.getName(),
                             renderedResultText,
                             template,
                             properties
-                    ),
-                    CommonErrEnum.JINJA_TEMPLATE_TRANS_ERR.getCode(),
-                    CommonErrEnum.JINJA_TEMPLATE_TRANS_ERR.getMsg() + "(renderedResultText:" + renderedResultText + ")"
+                    )
             );
         }
     }

@@ -46,7 +46,7 @@
         <slf4j.version>1.7.25</slf4j.version>
 
         <jackson.version>2.13.0</jackson.version>
-        <fastjson.version>1.2.75</fastjson.version>
+        <fastjson.version>2.0.3</fastjson.version>
         <xstream.version>1.4.16</xstream.version>
         <dom4j.version>1.6.1</dom4j.version>
         <snakeyaml.yml-file.version>1.26</snakeyaml.yml-file.version>
@@ -101,6 +101,8 @@
         <okhttp.version>4.7.2</okhttp.version>
         <jsoup.version>1.10.2</jsoup.version>
         <selenium.version>3.0.1</selenium.version>
+
+        <jinjava.version>2.5.6</jinjava.version>
 
         <!-- 分页插件版本号 -->
         <pagehelper.version>4.1.6</pagehelper.version>
@@ -219,6 +221,20 @@
                 <artifactId>snakeyaml</artifactId>
                 <version>${snakeyaml.yml-file.version}</version>
                 <scope>compile</scope>
+            </dependency>
+
+            <!-- 文本渲染模板 -->
+            <!-- http://docs.jinkan.org/docs/jinja2/templates.html -->
+            <dependency>
+                <groupId>com.hubspot.jinjava</groupId>
+                <artifactId>jinjava</artifactId>
+                <version>${jinjava.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>guava</artifactId>
+                        <groupId>com.google.guava</groupId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
             <!-- # [2] Basic development framework(基础开发框架) # -->

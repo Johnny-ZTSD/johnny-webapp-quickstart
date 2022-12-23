@@ -20,7 +20,7 @@ import java.io.Serializable;
 public class PageRequest<T> extends BasePage {
     private final static Logger LOG = LoggerFactory.getLogger(PageRequest.class);
 
-    private static final long serialVersionUID = 3256652355L;
+    public static final String PARAMS_NAME = "params";
 
     @ApiModelProperty(
         value = "分页请求参数",

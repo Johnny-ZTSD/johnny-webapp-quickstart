@@ -1,4 +1,4 @@
-package cn.seres.bd.dataservice.common.utils;
+package cn.johnnyzen.common.util.lang;
 
 /**
  * @author 408675 (tai.zeng@seres.cn)

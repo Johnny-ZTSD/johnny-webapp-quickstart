@@ -1,4 +1,4 @@
-package cn.seres.bd.dataservice.common.utils;
+package cn.johnnyzen.common.util.lang;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.io.IORuntimeException;

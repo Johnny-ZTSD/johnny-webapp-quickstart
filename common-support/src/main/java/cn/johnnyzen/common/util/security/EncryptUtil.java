@@ -1,4 +1,4 @@
-package cn.johnnyzen.common.util.lang;
+package cn.johnnyzen.common.util.security;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;

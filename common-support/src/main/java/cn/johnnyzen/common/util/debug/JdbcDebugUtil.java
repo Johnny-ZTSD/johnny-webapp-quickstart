@@ -13,9 +13,14 @@ import java.sql.SQLException;
  * @create-time 2022/12/12 11:07
  * @description JDBC 连接的 调试工具
  */
-public class JdbcConnectionUtil {
-    private static final Logger logger = LoggerFactory.getLogger(JdbcConnectionUtil.class);
+public class JdbcDebugUtil {
+    private static final Logger logger = LoggerFactory.getLogger(JdbcDebugUtil.class);
 
+    /**
+     * 打印 ResultSet
+     * @param queryResultSet
+     * @throws SQLException
+     */
     public static void printResultSet(ResultSet queryResultSet) throws SQLException {
         //结果集
 //        ResultSet queryResultSet = null;
