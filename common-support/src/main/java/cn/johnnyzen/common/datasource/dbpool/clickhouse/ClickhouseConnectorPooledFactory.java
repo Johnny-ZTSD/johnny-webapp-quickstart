@@ -1,18 +1,16 @@
-package cn.seres.bd.dataservice.common.dbpool.clickhouse;
+package cn.johnnyzen.common.datasource.dbpool.clickhouse;
 
-import cn.seres.bd.dataservice.common.connector.ClickhouseConnector;
-import cn.seres.bd.dataservice.common.connector.InfluxDbConnector;
-import cn.seres.bd.dataservice.common.dbpool.AbstractDatabaseConnectorPooledFactory;
-import cn.seres.bd.dataservice.model.datasource.DataSource;
+import cn.johnnyzen.common.datasource.entity.DataSource;
+import cn.johnnyzen.common.datasource.connector.clickhouse.ClickhouseConnector;
+import cn.johnnyzen.common.datasource.dbpool.AbstractDatabaseConnectorPooledFactory;
 import org.apache.commons.pool2.PooledObject;
 import org.apache.commons.pool2.impl.DefaultPooledObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * @author 408675 (tai.zeng@seres.cn) / Jenson
+ * @author johnnyzen / Jenson
  * @version v1.0
- * @project bdp_common_data_service
  * @create-time 2022/12/1 13:54
  * @description 数据库池化工厂
  * @reference-doc

@@ -1,5 +1,10 @@
-package cn.seres.bd.dataservice.common.query;
+package cn.johnnyzen.common.datasource.query.redis;
 
+import cn.johnnyzen.common.datasource.connector.redis.RedisConnector;
+import cn.johnnyzen.common.datasource.entity.QueryJobInfo;
+import cn.johnnyzen.common.datasource.query.AbstractQuery;
+import cn.johnnyzen.common.dto.page.PageResponse;
+import cn.johnnyzen.common.exception.ApplicationRuntimeException;
 import cn.seres.bd.dataservice.common.connector.AbstractConnector;
 import cn.seres.bd.dataservice.common.connector.RedisConnector;
 import cn.seres.bd.dataservice.common.dto.CommonSearchDto;
@@ -26,9 +31,8 @@ import java.sql.*;
 import java.util.*;
 
 /**
- * @author 408675 (tai.zeng@seres.cn)
+ * @author johnnyzen
  * @version v1.0
- * @project bdp_common_data_service
  * @create-time 2022/11/25 18:19
  * @description ...
  */
@@ -91,11 +95,11 @@ public class RedisQuery extends AbstractQuery<RedisConnector> {
      *      HGETALL;{\"vin\":\"LM8F7E696NA000070\"};bdp:vhr:canLastData:vin:LM8F7E696NA000070
      * @param params
      * @return
-     * @throws CommonException
+     * @throws ApplicationRuntimeException
      * @throws SQLException
      */
     @Override
-    public PageResponse query(QueryJobInfo queryJobInfo, Map<String, Object> params) throws CommonException, SQLException {
+    public PageResponse query(QueryJobInfo queryJobInfo, Map<String, Object> params) throws ApplicationRuntimeException, SQLException {
         CommonSearchDto requestInfo = (CommonSearchDto) params.get(CommonPostProcessParamEnum.REQUEST_INFO.getCode());
         String parsedSqlTemplate = JinjaUtil.jinjaConvert(queryJobInfo.getSqlTemplate(), requestInfo.getDynamicPara());
 //        RedisConnector connector = new RedisConnector(queryJobInfo.getDatasourceUrl(), queryJobInfo.getDatasourcePassword());
@@ -190,7 +194,7 @@ public class RedisQuery extends AbstractQuery<RedisConnector> {
         if(!isLegalOperation){
             String errorMseeage = String.format("This command type(%s) is illegal operation!", commandType);
             logger.error(errorMseeage);
-            throw new BusinessException(errorMseeage);
+            throw new ApplicationRuntimeException(errorMseeage);
         }
     }
 
@@ -259,8 +263,8 @@ public class RedisQuery extends AbstractQuery<RedisConnector> {
     }
 
     @Override
-    public PageResponse autoPagingQuery(QueryJobInfo queryJobInfo, Map<String, Object> params) throws CommonException {
+    public PageResponse autoPagingQuery(QueryJobInfo queryJobInfo, Map<String, Object> params) throws ApplicationRuntimeException {
         //TODO 是否支持自动分页?可不予支持
-        throw new BusinessException("this auto paging query method is not support for redis database!");
+        throw new ApplicationRuntimeException("this auto paging query method is not support for redis database!");
     }
 }

@@ -1,14 +1,13 @@
-package cn.seres.bd.dataservice.common.dbpool.elasticsearch;
+package cn.johnnyzen.common.datasource.dbpool.elasticsearch;
 
-import cn.seres.bd.dataservice.common.connector.elasticsearch.ElasticSearchConnector;
-import cn.seres.bd.dataservice.common.dbpool.AbstractDatabaseConnectorKeyedObjectPool;
-import cn.seres.bd.dataservice.common.dbpool.AbstractDatabaseConnectorKeyedPooledFactory;
-import cn.seres.bd.dataservice.model.datasource.DataSource;
+import cn.johnnyzen.common.datasource.entity.DataSource;
+import cn.johnnyzen.common.datasource.connector.elasticsearch.ElasticSearchConnector;
+import cn.johnnyzen.common.datasource.dbpool.AbstractDatabaseConnectorKeyedObjectPool;
+import cn.johnnyzen.common.datasource.dbpool.AbstractDatabaseConnectorKeyedPooledFactory;
 
 /**
- * @author 408675 (tai.zeng@seres.cn)
+ * @author johnnyzen
  * @version v1.0
- * @project bdp_common_data_service
  * @create-time 2022/12/8 16:47
  * @description ...
  */

@@ -1,10 +1,9 @@
-package cn.seres.bd.dataservice.common.query;
+package cn.johnnyzen.common.datasource.query;
 
-import cn.seres.bd.dataservice.common.connector.AbstractConnector;
-import cn.seres.bd.dataservice.common.dto.page.PageResponse;
-import cn.seres.bd.dataservice.common.exception.CommonException;
-import cn.seres.bd.dataservice.model.datasource.DataSource;
-import cn.seres.bd.dataservice.model.entity.QueryJobInfo;
+import cn.johnnyzen.common.datasource.connector.AbstractConnector;
+import cn.johnnyzen.common.datasource.entity.QueryJobInfo;
+import cn.johnnyzen.common.dto.page.PageResponse;
+import cn.johnnyzen.common.exception.ApplicationRuntimeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
@@ -13,9 +12,8 @@ import java.sql.SQLException;
 import java.util.Map;
 
 /**
- * @author 408675 (tai.zeng@seres.cn)
+ * @author johnnyzen
  * @version v1.0
- * @project bdp_common_data_service
  * @create-time 2022/11/14 23:22
  * @description 查询接口
  */
@@ -37,21 +35,21 @@ public abstract class AbstractQuery<T extends AbstractConnector> {
      * @param queryJobInfo
      * @param params
      * @return
-     * @throws CommonException
+     * @throws ApplicationRuntimeException
      * @throws SQLException
      */
     //public abstract PageResponse query(String sqlTemplate, Map<String, Object> dynamicPara, InfluxDbConnector connector) throws CommonException;
-    public abstract PageResponse query(QueryJobInfo queryJobInfo, Map<String, Object> params) throws CommonException, SQLException;
+    public abstract PageResponse query(QueryJobInfo queryJobInfo, Map<String, Object> params) throws ApplicationRuntimeException, SQLException;
 
     /**
      * 自动分页查询
      * @param queryJobInfo
      * @param params
      * @return
-     * @throws CommonException
+     * @throws ApplicationRuntimeException
      * @throws SQLException
      */
-    public abstract PageResponse autoPagingQuery(QueryJobInfo queryJobInfo, Map<String, Object> params) throws CommonException, SQLException;
+    public abstract PageResponse autoPagingQuery(QueryJobInfo queryJobInfo, Map<String, Object> params) throws ApplicationRuntimeException, SQLException;
 
     /**
      * 获取 分页统计的 模板 SQL
@@ -62,7 +60,7 @@ public abstract class AbstractQuery<T extends AbstractConnector> {
      */
     public String getCountSqlTemplate(QueryJobInfo queryJobInfo){
         String countSqlTemplate = null;
-        if(queryJobInfo.getIsSqlSupportAutoPaging()){//
+        if(queryJobInfo.getSqlSupportAutoPagable()){//
             countSqlTemplate = queryJobInfo.getCountSqlTemplate();
             //countSqlTemplate 为空时: 启用默认的统计总记录的方式 ↓
             if(StringUtils.isEmpty(countSqlTemplate)){

@@ -1,9 +1,8 @@
-package cn.seres.bd.dataservice.common.dbpool;
+package cn.johnnyzen.common.datasource.dbpool;
 
-import cn.seres.bd.dataservice.common.connector.AbstractConnector;
-import cn.seres.bd.dataservice.common.connector.RedisConnector;
-import cn.seres.bd.dataservice.common.exception.BusinessException;
-import cn.seres.bd.dataservice.model.datasource.DataSource;
+import cn.johnnyzen.common.datasource.entity.DataSource;
+import cn.johnnyzen.common.datasource.connector.AbstractConnector;
+import cn.johnnyzen.common.exception.ApplicationRuntimeException;
 import org.apache.commons.pool2.KeyedPooledObjectFactory;
 import org.apache.commons.pool2.impl.GenericKeyedObjectPool;
 import org.apache.commons.pool2.impl.GenericKeyedObjectPoolConfig;
@@ -12,9 +11,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.ObjectUtils;
 
 /**
- * @author 408675 (tai.zeng@seres.cn)
+ * @author johnnyzen
  * @version v1.0
- * @project bdp_common_data_service
  * @create-time 2022/12/8 17:01
  * @description 抽象的数据库对象连接池
  */
@@ -36,9 +34,9 @@ public abstract class AbstractDatabaseConnectorKeyedObjectPool<K extends DataSou
     @Override
     public AbstractConnector borrowObject(DataSource dataSource, long borrowMaxWaitMillis) {
         if(ObjectUtils.isEmpty(dataSource)){
-            throw new BusinessException("dataSource is empty!");
+            throw new ApplicationRuntimeException("dataSource is empty!");
         }
-        String databaseType = dataSource.getDatasourceType2();
+        String databaseType = dataSource.getDatasourceType();
         AbstractConnector connector = null;
         boolean borrowSuccessful = true; // 默认(true): 借阅成功
         Exception exception = null;
@@ -55,7 +53,7 @@ public abstract class AbstractDatabaseConnectorKeyedObjectPool<K extends DataSou
             String errorMessage = String.format("Fail to borrow a connector instance, databaseType: %s, datasource: %s.", databaseType, dataSource.toString());
             logger.error(errorMessage);
             logger.error("exception: {}", exception);
-            throw new BusinessException(errorMessage);
+            throw new ApplicationRuntimeException(errorMessage);
         }
         return connector;
     }

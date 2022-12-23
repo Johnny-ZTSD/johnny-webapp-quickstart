@@ -601,7 +601,17 @@
                 <scope>compile</scope>
             </dependency>
 
-            <!-- (6.2) connection pool(连接池，用来加载 DruidDataSource) -->
+            <!-- (6.2) connection pool(连接池，用来加载 xxxxDataSource, 例如: DruidDataSource) -->
+            <!-- 基于 commons-pool2 自研 各类连接池  -->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-pool2</artifactId>
+                <version>2.6.2</version>
+                <type>jar</type>
+                <scope>compile</scope>
+            </dependency>
+
+            <!-- DruidDataSource -->
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>druid</artifactId>

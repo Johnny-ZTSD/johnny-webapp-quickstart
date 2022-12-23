@@ -1,14 +1,13 @@
-package cn.seres.bd.dataservice.common.dbpool.redis;
+package cn.johnnyzen.common.datasource.dbpool.redis;
 
-import cn.seres.bd.dataservice.common.connector.RedisConnector;
-import cn.seres.bd.dataservice.common.dbpool.AbstractDatabaseConnectorKeyedObjectPool;
-import cn.seres.bd.dataservice.common.dbpool.AbstractDatabaseConnectorKeyedPooledFactory;
-import cn.seres.bd.dataservice.model.datasource.DataSource;
+import cn.johnnyzen.common.datasource.entity.DataSource;
+import cn.johnnyzen.common.datasource.connector.redis.RedisConnector;
+import cn.johnnyzen.common.datasource.dbpool.AbstractDatabaseConnectorKeyedObjectPool;
+import cn.johnnyzen.common.datasource.dbpool.AbstractDatabaseConnectorKeyedPooledFactory;
 
 /**
- * @author 408675 (tai.zeng@seres.cn)
+ * @author johnnyzen
  * @version v1.0
- * @project bdp_common_data_service
  * @create-time 2022/12/8 16:49
  * @description ...
  */

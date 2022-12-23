@@ -1,4 +1,4 @@
-package cn.johnnyzen.common.datasource;
+package cn.johnnyzen.common.datasource.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

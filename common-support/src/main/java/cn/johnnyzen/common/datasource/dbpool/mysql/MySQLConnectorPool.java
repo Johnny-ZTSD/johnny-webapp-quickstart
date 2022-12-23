@@ -1,8 +1,7 @@
-package cn.seres.bd.dataservice.common.dbpool.mysql;
+package cn.johnnyzen.common.datasource.dbpool.mysql;
 
 
-import cn.seres.bd.dataservice.common.connector.ClickhouseConnector;
-import cn.seres.bd.dataservice.common.connector.MySQLConnector;
+import cn.johnnyzen.common.datasource.connector.mysql.MySQLConnector;
 import org.apache.commons.pool2.PooledObjectFactory;
 import org.apache.commons.pool2.impl.AbandonedConfig;
 import org.apache.commons.pool2.impl.GenericObjectPool;

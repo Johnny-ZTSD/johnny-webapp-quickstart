@@ -6,7 +6,7 @@
 package cn.johnnyzen.common.datasource.connector.influxdb;
 
 import cn.johnnyzen.common.datasource.connector.AbstractConnector;
-import cn.johnnyzen.common.datasource.DataSource;
+import cn.johnnyzen.common.datasource.entity.DataSource;
 import cn.johnnyzen.common.exception.ApplicationErrorCodeEnum;
 import cn.johnnyzen.common.exception.ApplicationRuntimeException;
 import okhttp3.OkHttpClient;

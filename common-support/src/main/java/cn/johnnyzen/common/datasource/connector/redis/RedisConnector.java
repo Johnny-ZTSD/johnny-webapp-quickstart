@@ -1,7 +1,7 @@
 package cn.johnnyzen.common.datasource.connector.redis;
 
 import cn.johnnyzen.common.datasource.connector.AbstractConnector;
-import cn.johnnyzen.common.datasource.DataSource;
+import cn.johnnyzen.common.datasource.entity.DataSource;
 import cn.johnnyzen.common.exception.ApplicationRuntimeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

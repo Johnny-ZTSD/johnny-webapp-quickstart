@@ -1,22 +1,18 @@
-package cn.seres.bd.dataservice.common.dbpool.clickhouse;
+package cn.johnnyzen.common.datasource.dbpool.clickhouse;
 
-import cn.seres.bd.dataservice.common.connector.AbstractConnector;
-import cn.seres.bd.dataservice.common.connector.ClickhouseConnector;
-import cn.seres.bd.dataservice.common.connector.elasticsearch.ElasticSearchConnector;
-import cn.seres.bd.dataservice.common.dbpool.AbstractDatabaseConnectorKeyedPooledFactory;
-import cn.seres.bd.dataservice.common.dbpool.elasticsearch.ElasticSearchConnectorKeyedPooledObjectFactory;
-import cn.seres.bd.dataservice.model.datasource.DataSource;
+import cn.johnnyzen.common.datasource.entity.DataSource;
+import cn.johnnyzen.common.datasource.connector.AbstractConnector;
+import cn.johnnyzen.common.datasource.connector.clickhouse.ClickhouseConnector;
+import cn.johnnyzen.common.datasource.dbpool.AbstractDatabaseConnectorKeyedPooledFactory;
 import org.apache.commons.pool2.PooledObject;
-import org.apache.commons.pool2.impl.DefaultPooledObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 
 /**
- * @author 408675 (tai.zeng@seres.cn)
+ * @author johnnyzen
  * @version v1.0
- * @project bdp_common_data_service
  * @create-time 2022/12/2 11:46
  * @description ...
  */
@@ -33,14 +29,14 @@ public class ClickhouseConnectorKeyedPooledObjectFactory extends AbstractDatabas
     public void destroyObject(DataSource dataSource, PooledObject<AbstractConnector> pooledObject) throws Exception {
         ClickhouseConnector connector = (ClickhouseConnector) pooledObject.getObject();
         connector.close();
-        logger.debug("destroying a database connector object and connection ... and current instanceId : {}, datasourceId : {}, datasourceType2 : {}", connector.getInstanceId(), dataSource.getDatasourceId(), dataSource.getDatasourceType2());
+        logger.debug("destroying a database connector object and connection ... and current instanceId : {}, datasourceId : {}, datasourceType2 : {}", connector.getInstanceId(), dataSource.getDatasourceId(), dataSource.getDatasourceType());
     }
 
     @Override
     public boolean validateObject(DataSource dataSource, PooledObject<AbstractConnector> pooledObject) {
         ClickhouseConnector connector = (ClickhouseConnector) pooledObject.getObject();
         boolean health = connector.health();
-        logger.debug("validating a database connector object and connection ...,and current health status is : {}, current instanceId : {}, datasourceId : {}, datasourceType2 : {}", health, connector.getInstanceId(), dataSource.getDatasourceId(), dataSource.getDatasourceType2());
+        logger.debug("validating a database connector object and connection ...,and current health status is : {}, current instanceId : {}, datasourceId : {}, datasourceType2 : {}", health, connector.getInstanceId(), dataSource.getDatasourceId(), dataSource.getDatasourceType());
         return health;
     }
 }

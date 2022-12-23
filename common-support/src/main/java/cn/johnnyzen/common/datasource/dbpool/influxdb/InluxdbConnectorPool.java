@@ -1,16 +1,15 @@
-package cn.seres.bd.dataservice.common.dbpool.influxdb;
+package cn.johnnyzen.common.datasource.dbpool.influxdb;
 
 
-import cn.seres.bd.dataservice.common.connector.InfluxDbConnector;
+import cn.johnnyzen.common.datasource.connector.influxdb.InfluxDbConnector;
 import org.apache.commons.pool2.PooledObjectFactory;
 import org.apache.commons.pool2.impl.AbandonedConfig;
 import org.apache.commons.pool2.impl.GenericObjectPool;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 
 /**
- * @author 408675 (tai.zeng@seres.cn) / Jenson
+ * @author johnnyzen / Jenson
  * @version v1.0
- * @project bdp_common_data_service
  * @create-time 2022/12/1 15:05
  * @description
  * @reference-doc

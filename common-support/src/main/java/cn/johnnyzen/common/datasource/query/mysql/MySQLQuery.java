@@ -16,9 +16,8 @@ import java.sql.*;
 import java.util.*;
 
 /**
- * @author 408675 (tai.zeng@seres.cn)
+ * @author johnnyzen
  * @version v1.0
- * @project bdp_common_data_service
  * @create-time 2022/12/2 14:42
  * @description ...
  */

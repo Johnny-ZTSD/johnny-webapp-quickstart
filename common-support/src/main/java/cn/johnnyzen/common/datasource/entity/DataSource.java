@@ -1,4 +1,4 @@
-package cn.johnnyzen.common.datasource;
+package cn.johnnyzen.common.datasource.entity;
 
 import java.util.Date;
 import java.util.Properties;

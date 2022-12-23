@@ -1,5 +1,10 @@
-package cn.seres.bd.dataservice.common.query;
+package cn.johnnyzen.common.datasource.query.influxdb;
 
+import cn.johnnyzen.common.datasource.connector.influxdb.InfluxDbConnector;
+import cn.johnnyzen.common.datasource.entity.QueryJobInfo;
+import cn.johnnyzen.common.datasource.query.AbstractQuery;
+import cn.johnnyzen.common.dto.page.PageResponse;
+import cn.johnnyzen.common.exception.ApplicationRuntimeException;
 import cn.seres.bd.dataservice.common.connector.AbstractConnector;
 import cn.seres.bd.dataservice.common.connector.InfluxDbConnector;
 import cn.seres.bd.dataservice.common.dto.CommonSearchDto;
@@ -21,9 +26,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * @author 408675 (tai.zeng@seres.cn)
+ * @author johnnyzen
  * @version v1.0
- * @project bdp-data-service-parent
  * @create-date 2022/7/12 16:33
  * @description db连接工具测试 - influxdb
  */
@@ -35,7 +39,7 @@ public class InfluxDBQuery extends AbstractQuery<InfluxDbConnector> {
         super(builtConnector);
     }
 
-    public PageResponse query(String sqlTemplate, Map<String, Object> dynamicPara, InfluxDbConnector connector) throws CommonException {
+    public PageResponse query(String sqlTemplate, Map<String, Object> dynamicPara, InfluxDbConnector connector) throws ApplicationRuntimeException {
         String sql = JinjaUtil.jinjaConvert(sqlTemplate, dynamicPara);
         sql = JinjaUtil.jinjaConvert(sql, dynamicPara); // 渲染2次，以解决 SQL模板 中存在 {% raw %}xx{% edraw %} 标签的渲染需求
 
@@ -52,7 +56,7 @@ public class InfluxDBQuery extends AbstractQuery<InfluxDbConnector> {
             if(result.getError()!=null){
                 String errorMessage = String.format("happens a exception when query influxdb,sql: %s, the error info is: %s", sql, result.getError());
                 logger.error(errorMessage);
-                throw new BusinessException(errorMessage);
+                throw new ApplicationRuntimeException(errorMessage);
             }
             if(seriesList!=null){
                 List<Map<String, Object>> subResultList = parseOneSeriesList(seriesList);
@@ -127,7 +131,7 @@ public class InfluxDBQuery extends AbstractQuery<InfluxDbConnector> {
 
     //不分页查询
     @Override
-    public PageResponse query(QueryJobInfo queryJobInfo, Map<String, Object> params) throws CommonException {
+    public PageResponse query(QueryJobInfo queryJobInfo, Map<String, Object> params) throws ApplicationRuntimeException {
         String sqlTemplate = queryJobInfo.getSqlTemplate();
         CommonSearchDto requestInfo = (CommonSearchDto) params.get(CommonPostProcessParamEnum.REQUEST_INFO.getCode());
         Map<String, Object> dynamicPara = requestInfo.getDynamicPara();
@@ -140,7 +144,7 @@ public class InfluxDBQuery extends AbstractQuery<InfluxDbConnector> {
 
     //自动分页查询
     @Override
-    public PageResponse autoPagingQuery(QueryJobInfo queryJobInfo, Map<String, Object> params) throws CommonException {
+    public PageResponse autoPagingQuery(QueryJobInfo queryJobInfo, Map<String, Object> params) throws ApplicationRuntimeException {
         CommonSearchDto requestInfo = (CommonSearchDto) params.get(CommonPostProcessParamEnum.REQUEST_INFO.getCode());
 //        InfluxDbConnector connector = new InfluxDbConnector(queryJobInfo.getDatasourceUrl(), queryJobInfo.getDatasourceUser(), queryJobInfo.getDatasourcePassword());
 //        connector.build();
@@ -193,10 +197,10 @@ public class InfluxDBQuery extends AbstractQuery<InfluxDbConnector> {
         QueryResult queryResult = null;
         try {
             queryResult = this.connector.query(pageCountSql);
-        } catch (CommonException e) {
+        } catch (ApplicationRuntimeException e) {
             String errorMessage = String.format(CommonErrEnum.EXEC_SQL_ERR.getMsg()  + " | occurs to exception when query count total size from influxdb. pageCountSql: %s", pageCountSql);
             logger.error(errorMessage);
-            throw new BusinessException(e, errorMessage, CommonErrEnum.EXEC_SQL_ERR.getCode());
+            throw new ApplicationRuntimeException(e, errorMessage, CommonErrEnum.EXEC_SQL_ERR.getCode());
         }
         Integer totalSize = 0;
         if (queryResult.getError() == null && queryResult.getResults().get(0).getError() == null && queryResult.getResults().get(0).getSeries() != null) {

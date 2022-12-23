@@ -1,17 +1,14 @@
-package cn.seres.bd.dataservice.common.dbpool;
+package cn.johnnyzen.common.datasource.dbpool;
 
-import cn.seres.bd.dataservice.common.connector.InfluxDbConnector;
-import cn.seres.bd.dataservice.model.datasource.DataSource;
 //import org.apache.commons.pool2.PooledObjectFactory;
+import cn.johnnyzen.common.datasource.entity.DataSource;
 import org.apache.commons.pool2.BasePooledObjectFactory;
-import org.apache.commons.pool2.KeyedPooledObjectFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * @author 408675 (tai.zeng@seres.cn)
+ * @author johnnyzen
  * @version v1.0
- * @project bdp_common_data_service
  * @create-time 2022/12/2 0:37
  * @description 数据库连接池工厂类
  *  1、基于 org.apache.commons.pool2.BasePooledObjectFactory or PooledObjectFactory

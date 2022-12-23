@@ -1,5 +1,8 @@
-package cn.seres.bd.dataservice.common.query;
+package cn.johnnyzen.common.datasource.query;
 
+import cn.johnnyzen.common.datasource.connector.AbstractConnector;
+import cn.johnnyzen.common.datasource.datatype.DatasourceCatagory;
+import cn.johnnyzen.common.datasource.datatype.DatasourceType;
 import cn.seres.bd.dataservice.common.connector.*;
 import cn.seres.bd.dataservice.common.connector.elasticsearch.ElasticSearchConnector;
 import cn.seres.bd.dataservice.common.dto.page.PageResponse;
@@ -18,9 +21,8 @@ import java.util.Map;
 
 
 /**
- * @author 408675 (tai.zeng@seres.cn)
+ * @author johnnyzen
  * @version v1.0
- * @project bdp_common_data_service
  * @create-time 2022/11/15 0:37
  * @description 简单工厂模式
  */
@@ -35,7 +37,7 @@ public class QueryFactory {
      *  1、允许 connector 为空.因为目前存在个别数据源(ElasticSearch)暂不依赖于 基于 JDBC 实现的 ElasticSearchConnector( extends AbstractConnector)
      * @return
      */
-    public static AbstractQuery getQuerier(DsType1 datasourceType, DsType2 dbType, AbstractConnector connector){
+    public static AbstractQuery getQuerier(DatasourceCatagory datasourceType, DatasourceType dbType, AbstractConnector connector){
         if(ObjectUtils.isEmpty(connector)){
             String warnMessage = String.format("connector is empty when getQuerier(...), datasourceType: %s, dbType: %s, !", datasourceType, dbType);
             logger.warn(warnMessage);

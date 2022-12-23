@@ -1,13 +1,10 @@
-package cn.seres.bd.dataservice.common.query;
+package cn.johnnyzen.common.datasource.query.clickhouse;
 
-import cn.seres.bd.dataservice.common.connector.AbstractConnector;
-import cn.seres.bd.dataservice.common.connector.ClickhouseConnector;
-import cn.seres.bd.dataservice.common.dto.CommonSearchDto;
-import cn.seres.bd.dataservice.common.dto.page.PageResponse;
-import cn.seres.bd.dataservice.common.exception.CommonException;
-import cn.seres.bd.dataservice.common.postProcess.CommonPostProcessParamEnum;
-import cn.seres.bd.dataservice.common.utils.JinjaUtil;
-import cn.seres.bd.dataservice.model.entity.QueryJobInfo;
+import cn.johnnyzen.common.datasource.connector.clickhouse.ClickhouseConnector;
+import cn.johnnyzen.common.datasource.entity.QueryJobInfo;
+import cn.johnnyzen.common.datasource.query.AbstractQuery;
+import cn.johnnyzen.common.dto.page.PageResponse;
+import cn.johnnyzen.common.exception.ApplicationRuntimeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,9 +12,8 @@ import java.sql.*;
 import java.util.*;
 
 /**
- * @author 408675 (tai.zeng@seres.cn)
+ * @author johnnyzen
  * @version v1.0
- * @project bdp-data-service-parent
  * @create-date 2022/8/18 13:32
  * @description db连接工具测试 - clickhouse
  */
@@ -75,11 +71,11 @@ public class ClickhouseQuery extends AbstractQuery<ClickhouseConnector> {
      * @param queryJobInfo
      * @param params
      * @return
-     * @throws CommonException
+     * @throws ApplicationRuntimeException
      * @throws SQLException
      */
     @Override
-    public PageResponse autoPagingQuery(QueryJobInfo queryJobInfo, Map<String, Object> params) throws CommonException, SQLException {
+    public PageResponse autoPagingQuery(QueryJobInfo queryJobInfo, Map<String, Object> params) throws ApplicationRuntimeException, SQLException {
         CommonSearchDto requestInfo = (CommonSearchDto) params.get(CommonPostProcessParamEnum.REQUEST_INFO.getCode());
 //        ClickhouseConnector connector = new ClickhouseConnector(queryJobInfo.getDatasourceUrl(), queryJobInfo.getDatasourceUser(), queryJobInfo.getDatasourcePassword());
 //        connector.build();

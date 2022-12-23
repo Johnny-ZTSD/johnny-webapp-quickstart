@@ -1,33 +1,29 @@
-package cn.seres.bd.dataservice.common.query;
+package cn.johnnyzen.common.datasource.query.elasticsearch;
 
-import cn.seres.bd.dataservice.common.connector.AbstractConnector;
-import cn.seres.bd.dataservice.common.connector.elasticsearch.ElasticSearchConnector;
-import cn.seres.bd.dataservice.common.dto.CommonSearchDto;
-import cn.seres.bd.dataservice.common.dto.page.PageResponse;
-import cn.seres.bd.dataservice.common.exception.CommonErrEnum;
-import cn.seres.bd.dataservice.common.exception.CommonException;
-import cn.seres.bd.dataservice.common.postProcess.CommonPostProcessParamEnum;
-import cn.seres.bd.dataservice.common.spring.SpringContextUtil;
-import cn.seres.bd.dataservice.common.utils.JinjaUtil;
-import cn.seres.bd.dataservice.model.entity.QueryJobInfo;
+import cn.johnnyzen.common.datasource.connector.elasticsearch.ElasticSearchConnector;
+import cn.johnnyzen.common.datasource.entity.QueryJobInfo;
+import cn.johnnyzen.common.datasource.query.AbstractQuery;
+import cn.johnnyzen.common.dto.page.PageResponse;
+import cn.johnnyzen.common.exception.ApplicationErrorCodeEnum;
+import cn.johnnyzen.common.exception.ApplicationRuntimeException;
 import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
-import lombok.Data;
 import okhttp3.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.*;
 
 /**
- * @author yongbo.huang
+ * @author johnnyzen
  * @date 2022/10/25 上午10:14
  */
 public class ElasticSearchQuery extends AbstractQuery<ElasticSearchConnector> {
@@ -38,7 +34,7 @@ public class ElasticSearchQuery extends AbstractQuery<ElasticSearchConnector> {
     }
 
     @Override
-    public PageResponse query(QueryJobInfo queryJobInfo, Map<String, Object> params) throws CommonException {
+    public PageResponse query(QueryJobInfo queryJobInfo, Map<String, Object> params) throws ApplicationRuntimeException {
         try {
             CommonSearchDto requestInfo = (CommonSearchDto) params.get(CommonPostProcessParamEnum.REQUEST_INFO.getCode());
             String sql = JinjaUtil.jinjaConvert(queryJobInfo.getSqlTemplate(), requestInfo.getDynamicPara()).replace(";", "");
@@ -69,11 +65,11 @@ public class ElasticSearchQuery extends AbstractQuery<ElasticSearchConnector> {
      * @param queryJobInfo
      * @param params
      * @return
-     * @throws CommonException
+     * @throws ApplicationRuntimeException
      * @throws SQLException
      */
     @Override
-    public PageResponse autoPagingQuery(QueryJobInfo queryJobInfo, Map<String, Object> params) throws CommonException {
+    public PageResponse autoPagingQuery(QueryJobInfo queryJobInfo, Map<String, Object> params) throws ApplicationRuntimeException {
         try {
             CommonSearchDto requestInfo = (CommonSearchDto) params.get(CommonPostProcessParamEnum.REQUEST_INFO.getCode());
 
@@ -112,11 +108,11 @@ public class ElasticSearchQuery extends AbstractQuery<ElasticSearchConnector> {
 
             logger.info("[pageQuery] Time-consuming:{}", System.currentTimeMillis() - pageSqlStartTime);
             return new PageResponse(pageIndex, pageSize, responseList, totalSize);
-        } catch (CommonException e) {
+        } catch (ApplicationRuntimeException e) {
             throw e;
         } catch (Throwable e) {
             logger.error("pageQuery Throwable!queryJobInfo:{}", queryJobInfo, e);
-            throw new CommonException(CommonErrEnum.SYSTEM_INNER_ERR);
+            throw new ApplicationRuntimeException(ApplicationErrorCodeEnum.SYSTEM_INTERNAL_ERROR);
         }
 
     }
@@ -129,9 +125,9 @@ public class ElasticSearchQuery extends AbstractQuery<ElasticSearchConnector> {
      * @param queryJobInfo
      * @param sql
      * @return
-     * @throws CommonException
+     * @throws ApplicationRuntimeException
      */
-    private static Response post(QueryJobInfo queryJobInfo, String sql) throws IOException, CommonException {
+    private static Response post(QueryJobInfo queryJobInfo, String sql) throws IOException, ApplicationRuntimeException {
         Map<String, String> json = new HashMap<>(8);
         json.put("query", sql);
 
@@ -153,10 +149,10 @@ public class ElasticSearchQuery extends AbstractQuery<ElasticSearchConnector> {
 
             ErrorMessage errorMessage = mapper.readValue(body, ErrorMessage.class);
             if (null != errorMessage && errorMessage.getError() != null && errorMessage.getError().getType() != null) {
-                throw new CommonException(CommonErrEnum.QUERY_ES_FAIL.getCode(), CommonErrEnum.QUERY_ES_FAIL.getMsg() + "，失败原因:" + errorMessage.getError().getType());
+                throw new ApplicationRuntimeException(CommonErrEnum.QUERY_ES_FAIL.getCode(), CommonErrEnum.QUERY_ES_FAIL.getMsg() + "，失败原因:" + errorMessage.getError().getType());
             }
 
-            throw new CommonException(CommonErrEnum.QUERY_ES_FAIL);
+            throw new ApplicationRuntimeException(CommonErrEnum.QUERY_ES_FAIL);
         }
         return response;
     }
@@ -225,7 +221,7 @@ public class ElasticSearchQuery extends AbstractQuery<ElasticSearchConnector> {
     @Override
     public String getCountSqlTemplate(QueryJobInfo queryJobInfo) {
         String countSqlTemplate = null;
-        if (queryJobInfo.getIsSqlSupportAutoPaging()) {
+        if (queryJobInfo.getSqlSupportAutoPagable()) {
             countSqlTemplate = queryJobInfo.getCountSqlTemplate();
             if (StringUtils.isEmpty(countSqlTemplate)) {
                 countSqlTemplate = "SELECT COUNT(*) AS cnt FROM (" + queryJobInfo.getSqlTemplate() + " )";
@@ -234,7 +230,6 @@ public class ElasticSearchQuery extends AbstractQuery<ElasticSearchConnector> {
         return countSqlTemplate;
     }
 
-    @Data
     @JsonIgnoreProperties(ignoreUnknown = true)
     private static class QueryResult {
 
@@ -244,30 +239,141 @@ public class ElasticSearchQuery extends AbstractQuery<ElasticSearchConnector> {
         private List<List<Object>> datarows;
 
 
-        @Data
         private static class Column {
             private String name;
 
             private String alias;
 
             private String type;
+
+            public String getName() {
+                return name;
+            }
+
+            public void setName(String name) {
+                this.name = name;
+            }
+
+            public String getAlias() {
+                return alias;
+            }
+
+            public void setAlias(String alias) {
+                this.alias = alias;
+            }
+
+            public String getType() {
+                return type;
+            }
+
+            public void setType(String type) {
+                this.type = type;
+            }
+
+            @Override
+            public String toString() {
+                return "Column{" +
+                        "name='" + name + '\'' +
+                        ", alias='" + alias + '\'' +
+                        ", type='" + type + '\'' +
+                        '}';
+            }
+        }
+
+        public List<Column> getSchema() {
+            return schema;
+        }
+
+        public void setSchema(List<Column> schema) {
+            this.schema = schema;
+        }
+
+        public List<List<Object>> getDatarows() {
+            return datarows;
+        }
+
+        public void setDatarows(List<List<Object>> datarows) {
+            this.datarows = datarows;
+        }
+
+        @Override
+        public String toString() {
+            return "QueryResult{" +
+                    "schema=" + schema +
+                    ", datarows=" + datarows +
+                    '}';
         }
     }
 
-    @Data
     private static class ErrorMessage {
         private Integer status;
 
 
         private ErrorBody error;
 
-        @Data
         private static class ErrorBody {
             private String reason;
 
             private String details;
 
             private String type;
+
+            public String getReason() {
+                return reason;
+            }
+
+            public void setReason(String reason) {
+                this.reason = reason;
+            }
+
+            public String getDetails() {
+                return details;
+            }
+
+            public void setDetails(String details) {
+                this.details = details;
+            }
+
+            public String getType() {
+                return type;
+            }
+
+            public void setType(String type) {
+                this.type = type;
+            }
+
+            @Override
+            public String toString() {
+                return "ErrorBody{" +
+                        "reason='" + reason + '\'' +
+                        ", details='" + details + '\'' +
+                        ", type='" + type + '\'' +
+                        '}';
+            }
+        }
+
+        public Integer getStatus() {
+            return status;
+        }
+
+        public void setStatus(Integer status) {
+            this.status = status;
+        }
+
+        public ErrorBody getError() {
+            return error;
+        }
+
+        public void setError(ErrorBody error) {
+            this.error = error;
+        }
+
+        @Override
+        public String toString() {
+            return "ErrorMessage{" +
+                    "status=" + status +
+                    ", error=" + error +
+                    '}';
         }
     }
 }

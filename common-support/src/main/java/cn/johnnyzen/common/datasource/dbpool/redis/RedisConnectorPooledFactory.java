@@ -1,9 +1,9 @@
-package cn.seres.bd.dataservice.common.dbpool.redis;
+package cn.johnnyzen.common.datasource.dbpool.redis;
 
-import cn.seres.bd.dataservice.common.connector.ClickhouseConnector;
-import cn.seres.bd.dataservice.common.connector.RedisConnector;
-import cn.seres.bd.dataservice.common.dbpool.AbstractDatabaseConnectorPooledFactory;
-import cn.seres.bd.dataservice.model.datasource.DataSource;
+import cn.johnnyzen.common.datasource.entity.DataSource;
+import cn.johnnyzen.common.datasource.connector.redis.RedisConnector;
+import cn.johnnyzen.common.datasource.dbpool.AbstractDatabaseConnectorPooledFactory;
+
 import org.apache.commons.pool2.PooledObject;
 import org.apache.commons.pool2.impl.DefaultPooledObject;
 import org.slf4j.Logger;

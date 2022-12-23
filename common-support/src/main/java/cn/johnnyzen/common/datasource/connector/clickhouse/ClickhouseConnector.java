@@ -29,18 +29,18 @@ public class ClickhouseConnector extends AbstractConnector<Connection> {
 
     }
 
-    public ClickhouseConnector(cn.johnnyzen.common.datasource.DataSource dataSource){
+    public ClickhouseConnector(cn.johnnyzen.common.datasource.entity.DataSource dataSource){
         super(dataSource);
     }
 
     public ClickhouseConnector(String url, String username, String password) {
-        super(new cn.johnnyzen.common.datasource.DataSource(url, username, password));
+        super(new cn.johnnyzen.common.datasource.entity.DataSource(url, username, password));
         /* 单独在此处再反复 build()，是为了兼容在(2022/12/2)重构数据源代码以前的老接口 */
         build();
     }
 
     public ClickhouseConnector(String url, String username, String password, Properties properties) {
-        super(new cn.johnnyzen.common.datasource.DataSource(url, username, password, properties));
+        super(new cn.johnnyzen.common.datasource.entity.DataSource(url, username, password, properties));
     }
 
     public PreparedStatement getPreparedStatement(String sql) throws SQLException {
