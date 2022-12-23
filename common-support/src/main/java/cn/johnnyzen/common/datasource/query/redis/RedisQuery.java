@@ -3,19 +3,12 @@ package cn.johnnyzen.common.datasource.query.redis;
 import cn.johnnyzen.common.datasource.connector.redis.RedisConnector;
 import cn.johnnyzen.common.datasource.entity.QueryJobInfo;
 import cn.johnnyzen.common.datasource.query.AbstractQuery;
+import cn.johnnyzen.common.dto.page.PageRequest;
 import cn.johnnyzen.common.dto.page.PageResponse;
 import cn.johnnyzen.common.exception.ApplicationRuntimeException;
-import cn.seres.bd.dataservice.common.connector.AbstractConnector;
-import cn.seres.bd.dataservice.common.connector.RedisConnector;
-import cn.seres.bd.dataservice.common.dto.CommonSearchDto;
-import cn.seres.bd.dataservice.common.dto.page.PageResponse;
-import cn.seres.bd.dataservice.common.exception.BusinessException;
-import cn.seres.bd.dataservice.common.exception.CommonException;
-import cn.seres.bd.dataservice.common.postProcess.CommonPostProcessParamEnum;
-import cn.seres.bd.dataservice.common.utils.CollectionUtil;
-import cn.seres.bd.dataservice.common.utils.JinjaUtil;
-import cn.seres.bd.dataservice.common.utils.StringUtil;
-import cn.seres.bd.dataservice.model.entity.QueryJobInfo;
+import cn.johnnyzen.common.util.jinja.JinjaUtil;
+import cn.johnnyzen.common.util.lang.CollectionUtil;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
@@ -100,8 +93,8 @@ public class RedisQuery extends AbstractQuery<RedisConnector> {
      */
     @Override
     public PageResponse query(QueryJobInfo queryJobInfo, Map<String, Object> params) throws ApplicationRuntimeException, SQLException {
-        CommonSearchDto requestInfo = (CommonSearchDto) params.get(CommonPostProcessParamEnum.REQUEST_INFO.getCode());
-        String parsedSqlTemplate = JinjaUtil.jinjaConvert(queryJobInfo.getSqlTemplate(), requestInfo.getDynamicPara());
+        Map<String, Object> requestParams = (Map<String, Object>) params.get(PageRequest.PARAMS_NAME);
+        String parsedSqlTemplate = JinjaUtil.jinjaConvert(queryJobInfo.getSqlTemplate(), requestParams);
 //        RedisConnector connector = new RedisConnector(queryJobInfo.getDatasourceUrl(), queryJobInfo.getDatasourcePassword());
 //        connector.build();
         Jedis connection = this.connector.getConnection();
@@ -119,7 +112,7 @@ public class RedisQuery extends AbstractQuery<RedisConnector> {
 
             String commandTypeString = commands[0];
             if(StringUtils.isEmpty(commandTypeString)){
-                throw new BusinessException("commandType must be not empty!");
+                throw new ApplicationRuntimeException("commandType must be not empty!");
             }
             // commandType: HGETALL / HGET / ...
             Protocol.Command commandType = Protocol.Command.valueOf(commandTypeString);

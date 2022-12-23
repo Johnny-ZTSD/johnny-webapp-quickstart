@@ -3,18 +3,13 @@ package cn.johnnyzen.common.datasource.query.influxdb;
 import cn.johnnyzen.common.datasource.connector.influxdb.InfluxDbConnector;
 import cn.johnnyzen.common.datasource.entity.QueryJobInfo;
 import cn.johnnyzen.common.datasource.query.AbstractQuery;
+import cn.johnnyzen.common.dto.ResponseCodeEnum;
+import cn.johnnyzen.common.dto.page.BasePage;
+import cn.johnnyzen.common.dto.page.PageRequest;
 import cn.johnnyzen.common.dto.page.PageResponse;
 import cn.johnnyzen.common.exception.ApplicationRuntimeException;
-import cn.seres.bd.dataservice.common.connector.AbstractConnector;
-import cn.seres.bd.dataservice.common.connector.InfluxDbConnector;
-import cn.seres.bd.dataservice.common.dto.CommonSearchDto;
-import cn.seres.bd.dataservice.common.dto.page.PageResponse;
-import cn.seres.bd.dataservice.common.exception.BusinessException;
-import cn.seres.bd.dataservice.common.exception.CommonErrEnum;
-import cn.seres.bd.dataservice.common.exception.CommonException;
-import cn.seres.bd.dataservice.common.postProcess.CommonPostProcessParamEnum;
-import cn.seres.bd.dataservice.common.utils.JinjaUtil;
-import cn.seres.bd.dataservice.model.entity.QueryJobInfo;
+import cn.johnnyzen.common.util.jinja.JinjaUtil;
+
 import org.influxdb.dto.QueryResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -99,7 +94,7 @@ public class InfluxDBQuery extends AbstractQuery<InfluxDbConnector> {
      */
     private List<Map<String, Object>> parseOneSeriesList(List<QueryResult.Series> seriesList){
         if(seriesList == null){
-            logger.warn(CommonErrEnum.QUERY_RESULT_IS_EMPTY.getCode() + ":" + CommonErrEnum.QUERY_RESULT_IS_EMPTY.getMsg());
+            logger.warn(ResponseCodeEnum.QUERY_RESULT_IS_EMPTY.getCode() + ":" + ResponseCodeEnum.QUERY_RESULT_IS_EMPTY.getName());
             return null;
         }
         List<Map<String, Object>> resultList = new ArrayList<>();
@@ -133,11 +128,10 @@ public class InfluxDBQuery extends AbstractQuery<InfluxDbConnector> {
     @Override
     public PageResponse query(QueryJobInfo queryJobInfo, Map<String, Object> params) throws ApplicationRuntimeException {
         String sqlTemplate = queryJobInfo.getSqlTemplate();
-        CommonSearchDto requestInfo = (CommonSearchDto) params.get(CommonPostProcessParamEnum.REQUEST_INFO.getCode());
-        Map<String, Object> dynamicPara = requestInfo.getDynamicPara();
+        Map<String, Object> requestParams = (Map<String, Object>) params.get(PageRequest.PARAMS_NAME);
 //        InfluxDbConnector connector = new InfluxDbConnector(queryJobInfo.getDatasourceUrl(), queryJobInfo.getDatasourceUser(), queryJobInfo.getDatasourcePassword());
 //        connector.build();
-        PageResponse result = query(sqlTemplate, dynamicPara, this.connector);
+        PageResponse result = query(sqlTemplate, requestParams, this.connector);
 
         return result;
     }
@@ -145,16 +139,16 @@ public class InfluxDBQuery extends AbstractQuery<InfluxDbConnector> {
     //自动分页查询
     @Override
     public PageResponse autoPagingQuery(QueryJobInfo queryJobInfo, Map<String, Object> params) throws ApplicationRuntimeException {
-        CommonSearchDto requestInfo = (CommonSearchDto) params.get(CommonPostProcessParamEnum.REQUEST_INFO.getCode());
+        Map<String, Object> requestParams = (Map<String, Object>) params.get(PageRequest.PARAMS_NAME);
 //        InfluxDbConnector connector = new InfluxDbConnector(queryJobInfo.getDatasourceUrl(), queryJobInfo.getDatasourceUser(), queryJobInfo.getDatasourcePassword());
 //        connector.build();
-        Integer pageIndex = requestInfo.getPageRequest().getIndex();
-        Integer pageSize = requestInfo.getPageRequest().getSize();
+        Integer pageIndex = (Integer) params.get(BasePage.CURRENT_PAGE_NAME);
+        Integer pageSize = (Integer) params.get(BasePage.PAGE_SIZE_NAME);
 
 
-        String sql = renderToSql(queryJobInfo.getSqlTemplate(), requestInfo.getDynamicPara());
+        String sql = renderToSql(queryJobInfo.getSqlTemplate(), requestParams);
         String pageSql = sql + " limit " + pageSize + " offset " + (pageIndex - 1) * pageSize;
-        String pageCountSql = renderToCountSql(queryJobInfo.getCountSqlTemplate(), requestInfo.getDynamicPara());
+        String pageCountSql = renderToCountSql(queryJobInfo.getCountSqlTemplate(), requestParams);
         //String pageCountSql = "select count(uuid) as cnt from ( " + sql + " )";
 
         //获取总记录数
@@ -198,9 +192,9 @@ public class InfluxDBQuery extends AbstractQuery<InfluxDbConnector> {
         try {
             queryResult = this.connector.query(pageCountSql);
         } catch (ApplicationRuntimeException e) {
-            String errorMessage = String.format(CommonErrEnum.EXEC_SQL_ERR.getMsg()  + " | occurs to exception when query count total size from influxdb. pageCountSql: %s", pageCountSql);
+            String errorMessage = String.format(ResponseCodeEnum.DATABASE_QUERY_ERROR.getName()  + " | occurs to exception when query count total size from influxdb. pageCountSql: %s", pageCountSql);
             logger.error(errorMessage);
-            throw new ApplicationRuntimeException(e, errorMessage, CommonErrEnum.EXEC_SQL_ERR.getCode());
+            throw new ApplicationRuntimeException(ResponseCodeEnum.DATABASE_QUERY_ERROR);
         }
         Integer totalSize = 0;
         if (queryResult.getError() == null && queryResult.getResults().get(0).getError() == null && queryResult.getResults().get(0).getSeries() != null) {

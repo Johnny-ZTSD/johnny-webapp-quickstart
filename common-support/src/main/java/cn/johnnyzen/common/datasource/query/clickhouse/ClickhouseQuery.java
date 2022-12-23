@@ -3,8 +3,11 @@ package cn.johnnyzen.common.datasource.query.clickhouse;
 import cn.johnnyzen.common.datasource.connector.clickhouse.ClickhouseConnector;
 import cn.johnnyzen.common.datasource.entity.QueryJobInfo;
 import cn.johnnyzen.common.datasource.query.AbstractQuery;
+import cn.johnnyzen.common.dto.page.BasePage;
+import cn.johnnyzen.common.dto.page.PageRequest;
 import cn.johnnyzen.common.dto.page.PageResponse;
 import cn.johnnyzen.common.exception.ApplicationRuntimeException;
+import cn.johnnyzen.common.util.jinja.JinjaUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,9 +30,9 @@ public class ClickhouseQuery extends AbstractQuery<ClickhouseConnector> {
 
     //不分页查询
     @Override
-    public PageResponse query(QueryJobInfo queryJobInfo, Map<String, Object> params) throws CommonException, SQLException {
-        CommonSearchDto requestInfo = (CommonSearchDto) params.get(CommonPostProcessParamEnum.REQUEST_INFO.getCode());
-        String sql = JinjaUtil.jinjaConvert(queryJobInfo.getSqlTemplate(), requestInfo.getDynamicPara()).replace(";", "");
+    public PageResponse query(QueryJobInfo queryJobInfo, Map<String, Object> params) throws ApplicationRuntimeException, SQLException {
+        Map<String, Object> requestParams = (Map<String, Object>) params.get(PageRequest.PARAMS_NAME);
+        String sql = JinjaUtil.jinjaConvert(queryJobInfo.getSqlTemplate(), requestParams).replace(";", "");
 //        ClickhouseConnector connector = new ClickhouseConnector(queryJobInfo.getDatasourceUrl(), queryJobInfo.getDatasourceUser(), queryJobInfo.getDatasourcePassword());
 //        connector.build();
         Connection connection = this.connector.getConnection();
@@ -76,17 +79,17 @@ public class ClickhouseQuery extends AbstractQuery<ClickhouseConnector> {
      */
     @Override
     public PageResponse autoPagingQuery(QueryJobInfo queryJobInfo, Map<String, Object> params) throws ApplicationRuntimeException, SQLException {
-        CommonSearchDto requestInfo = (CommonSearchDto) params.get(CommonPostProcessParamEnum.REQUEST_INFO.getCode());
+        Map<String, Object> requestParams = (Map<String, Object>) params.get(PageRequest.PARAMS_NAME);
 //        ClickhouseConnector connector = new ClickhouseConnector(queryJobInfo.getDatasourceUrl(), queryJobInfo.getDatasourceUser(), queryJobInfo.getDatasourcePassword());
 //        connector.build();
         Connection connection = this.connector.getConnection();
 
-        Integer pageIndex = requestInfo.getPageRequest().getIndex();
-        Integer pageSize = requestInfo.getPageRequest().getSize();
+        Integer pageIndex = (Integer) params.get(BasePage.CURRENT_PAGE_NAME);
+        Integer pageSize = (Integer) params.get(BasePage.PAGE_SIZE_NAME);
 
-        String sql = renderToSql(queryJobInfo.getSqlTemplate(), requestInfo.getDynamicPara());
+        String sql = renderToSql(queryJobInfo.getSqlTemplate(), requestParams);
         String pageSql =  "select * from ( " +  sql + " ) limit " + pageSize + " offset " + (pageIndex - 1) * pageSize;
-        String pageCountSql = renderToCountSql(requestInfo.getDynamicPara(), queryJobInfo);
+        String pageCountSql = renderToCountSql(requestParams, queryJobInfo);
 
         Integer totalSize = getTotalSize(connection, pageCountSql);
         if (totalSize == 0) {

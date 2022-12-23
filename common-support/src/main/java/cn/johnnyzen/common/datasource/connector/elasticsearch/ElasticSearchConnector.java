@@ -2,7 +2,6 @@ package cn.johnnyzen.common.datasource.connector.elasticsearch;
 
 import cn.johnnyzen.common.datasource.connector.AbstractConnector;
 import cn.johnnyzen.common.datasource.entity.DataSource;
-import cn.johnnyzen.common.exception.ApplicationErrorCodeEnum;
 import cn.johnnyzen.common.exception.ApplicationRuntimeException;
 import cn.johnnyzen.common.util.io.net.UrlUtil;
 import org.slf4j.Logger;

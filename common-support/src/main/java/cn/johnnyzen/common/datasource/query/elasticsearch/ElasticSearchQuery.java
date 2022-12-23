@@ -3,9 +3,13 @@ package cn.johnnyzen.common.datasource.query.elasticsearch;
 import cn.johnnyzen.common.datasource.connector.elasticsearch.ElasticSearchConnector;
 import cn.johnnyzen.common.datasource.entity.QueryJobInfo;
 import cn.johnnyzen.common.datasource.query.AbstractQuery;
+import cn.johnnyzen.common.dto.ResponseCodeEnum;
+import cn.johnnyzen.common.dto.page.BasePage;
+import cn.johnnyzen.common.dto.page.PageRequest;
 import cn.johnnyzen.common.dto.page.PageResponse;
-import cn.johnnyzen.common.exception.ApplicationErrorCodeEnum;
 import cn.johnnyzen.common.exception.ApplicationRuntimeException;
+import cn.johnnyzen.common.util.jinja.JinjaUtil;
+import cn.johnnyzen.common.util.spring.SpringContextUtil;
 import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -16,7 +20,6 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -36,8 +39,8 @@ public class ElasticSearchQuery extends AbstractQuery<ElasticSearchConnector> {
     @Override
     public PageResponse query(QueryJobInfo queryJobInfo, Map<String, Object> params) throws ApplicationRuntimeException {
         try {
-            CommonSearchDto requestInfo = (CommonSearchDto) params.get(CommonPostProcessParamEnum.REQUEST_INFO.getCode());
-            String sql = JinjaUtil.jinjaConvert(queryJobInfo.getSqlTemplate(), requestInfo.getDynamicPara()).replace(";", "");
+            Map<String, Object> requestParams = (Map<String, Object>) params.get(PageRequest.PARAMS_NAME);
+            String sql = JinjaUtil.jinjaConvert(queryJobInfo.getSqlTemplate(), requestParams).replace(";", "");
 
             logger.info("Query-SQL:{}", sql);
 
@@ -51,11 +54,11 @@ public class ElasticSearchQuery extends AbstractQuery<ElasticSearchConnector> {
 
             PageResponse result = new PageResponse(1, Integer.MAX_VALUE, responseList, responseList.size());
             return result;
-        } catch (CommonException e) {
+        } catch (ApplicationRuntimeException e) {
             throw e;
         } catch (Throwable e) {
             logger.error("query Throwable!queryJobInfo:{}", queryJobInfo, e);
-            throw new CommonException(CommonErrEnum.SYSTEM_INNER_ERR);
+            throw new ApplicationRuntimeException(ResponseCodeEnum.SERVER_INTERNAL_ERROR);
         }
     }
 
@@ -71,21 +74,21 @@ public class ElasticSearchQuery extends AbstractQuery<ElasticSearchConnector> {
     @Override
     public PageResponse autoPagingQuery(QueryJobInfo queryJobInfo, Map<String, Object> params) throws ApplicationRuntimeException {
         try {
-            CommonSearchDto requestInfo = (CommonSearchDto) params.get(CommonPostProcessParamEnum.REQUEST_INFO.getCode());
+            Map<String, Object> requestParams = (Map<String, Object>) params.get(PageRequest.PARAMS_NAME);
 
-            Integer pageIndex = requestInfo.getPageRequest().getIndex();
-            Integer pageSize = requestInfo.getPageRequest().getSize();
+            Integer pageIndex = (Integer) params.get(BasePage.CURRENT_PAGE_NAME);
+            Integer pageSize = (Integer) params.get(BasePage.PAGE_SIZE_NAME);
 
-            String sql = JinjaUtil.jinjaConvert(queryJobInfo.getSqlTemplate(), requestInfo.getDynamicPara()).replace(";", "");
+            String sql = JinjaUtil.jinjaConvert(queryJobInfo.getSqlTemplate(), requestParams).replace(";", "");
 
             // 渲染2次，以解决 SQL模板 中存在 {% raw %}xx{% edraw %} 标签的渲染需求
-            sql = JinjaUtil.jinjaConvert(sql, requestInfo.getDynamicPara());
+            sql = JinjaUtil.jinjaConvert(sql, requestParams);
             String pageSql = sql + " limit " + pageSize + " offset " + (pageIndex - 1) * pageSize;
             logger.info("PageQuery-SQL:{}", pageSql);
 
-            String pageCountSql = JinjaUtil.jinjaConvert(getCountSqlTemplate(queryJobInfo), requestInfo.getDynamicPara());
+            String pageCountSql = JinjaUtil.jinjaConvert(getCountSqlTemplate(queryJobInfo), requestParams);
             // 渲染2次，以解决 SQL模板 中存在 {% raw %}xx{% edraw %} 标签的渲染需求
-            pageCountSql = JinjaUtil.jinjaConvert(pageCountSql, requestInfo.getDynamicPara());
+            pageCountSql = JinjaUtil.jinjaConvert(pageCountSql, requestParams);
 
             long pageCountQueryStartTime = System.currentTimeMillis();
 
@@ -112,7 +115,7 @@ public class ElasticSearchQuery extends AbstractQuery<ElasticSearchConnector> {
             throw e;
         } catch (Throwable e) {
             logger.error("pageQuery Throwable!queryJobInfo:{}", queryJobInfo, e);
-            throw new ApplicationRuntimeException(ApplicationErrorCodeEnum.SYSTEM_INTERNAL_ERROR);
+            throw new ApplicationRuntimeException(ResponseCodeEnum.SERVER_INTERNAL_ERROR);
         }
 
     }
@@ -149,10 +152,10 @@ public class ElasticSearchQuery extends AbstractQuery<ElasticSearchConnector> {
 
             ErrorMessage errorMessage = mapper.readValue(body, ErrorMessage.class);
             if (null != errorMessage && errorMessage.getError() != null && errorMessage.getError().getType() != null) {
-                throw new ApplicationRuntimeException(CommonErrEnum.QUERY_ES_FAIL.getCode(), CommonErrEnum.QUERY_ES_FAIL.getMsg() + "，失败原因:" + errorMessage.getError().getType());
+                throw new ApplicationRuntimeException(ResponseCodeEnum.QUERY_ES_FAIL.getName() + "，失败原因:" + errorMessage.getError().getType());
             }
 
-            throw new ApplicationRuntimeException(CommonErrEnum.QUERY_ES_FAIL);
+            throw new ApplicationRuntimeException(ResponseCodeEnum.QUERY_ES_FAIL);
         }
         return response;
     }

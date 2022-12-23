@@ -1,17 +1,22 @@
 package cn.johnnyzen.common.datasource.query;
 
 import cn.johnnyzen.common.datasource.connector.AbstractConnector;
+import cn.johnnyzen.common.datasource.connector.clickhouse.ClickhouseConnector;
+import cn.johnnyzen.common.datasource.connector.elasticsearch.ElasticSearchConnector;
+import cn.johnnyzen.common.datasource.connector.influxdb.InfluxDbConnector;
+import cn.johnnyzen.common.datasource.connector.mysql.MySQLConnector;
+import cn.johnnyzen.common.datasource.connector.redis.RedisConnector;
 import cn.johnnyzen.common.datasource.datatype.DatasourceCatagory;
 import cn.johnnyzen.common.datasource.datatype.DatasourceType;
-import cn.seres.bd.dataservice.common.connector.*;
-import cn.seres.bd.dataservice.common.connector.elasticsearch.ElasticSearchConnector;
-import cn.seres.bd.dataservice.common.dto.page.PageResponse;
-import cn.seres.bd.dataservice.common.emums.DsType1;
-import cn.seres.bd.dataservice.common.emums.DsType2;
-import cn.seres.bd.dataservice.common.exception.BusinessException;
-import cn.seres.bd.dataservice.common.exception.CommonErrEnum;
-import cn.seres.bd.dataservice.common.exception.CommonException;
-import cn.seres.bd.dataservice.model.entity.QueryJobInfo;
+import cn.johnnyzen.common.datasource.entity.QueryJobInfo;
+import cn.johnnyzen.common.datasource.query.clickhouse.ClickhouseQuery;
+import cn.johnnyzen.common.datasource.query.elasticsearch.ElasticSearchQuery;
+import cn.johnnyzen.common.datasource.query.influxdb.InfluxDBQuery;
+import cn.johnnyzen.common.datasource.query.mysql.MySQLQuery;
+import cn.johnnyzen.common.datasource.query.redis.RedisQuery;
+import cn.johnnyzen.common.dto.ResponseCodeEnum;
+import cn.johnnyzen.common.dto.page.PageResponse;
+import cn.johnnyzen.common.exception.ApplicationRuntimeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.ObjectUtils;
@@ -44,7 +49,7 @@ public class QueryFactory {
 //            throw new BusinessException(errorMessage);
         }
         AbstractQuery querier = null;
-        if (DsType1.DATABASE.equals(datasourceType) && dbType != null) {
+        if (DatasourceCatagory.DATABASE.equals(datasourceType) && dbType != null) {
             switch (dbType) {
                 case INFLUXDB:
                     querier = new InfluxDBQuery((InfluxDbConnector) connector);
@@ -58,7 +63,7 @@ public class QueryFactory {
                 case MYSQL:
                     querier = new MySQLQuery((MySQLConnector) connector);
                     //TODO MYSQL数据源适配
-                    throw new BusinessException("`MySQLQuery` class is need platform development to implements!");
+                    throw new ApplicationRuntimeException("`MySQLQuery` class is need platform development to implements!");
                 case REDIS:
                     querier = new RedisQuery((RedisConnector) connector);
                     break;
@@ -66,18 +71,18 @@ public class QueryFactory {
                     break;
             }
         } else {
-            logger.error(CommonErrEnum.QUERY_NOT_SUPPORT.getCode());
-            throw new BusinessException("errorCode: %s, errorMessage: %s", CommonErrEnum.QUERY_NOT_SUPPORT.getCode(), CommonErrEnum.QUERY_NOT_SUPPORT.getMsg());
+            logger.error(ResponseCodeEnum.DATABASE_TYPE_NOT_SUPPORT.toString());
+            throw new ApplicationRuntimeException("errorCode: %s, errorMessage: %s", ResponseCodeEnum.DATABASE_TYPE_NOT_SUPPORT.getCode(), ResponseCodeEnum.DATABASE_TYPE_NOT_SUPPORT.getName());
         }
         return querier;
     }
 
     public static PageResponse query(QueryJobInfo queryJobInfo, Map<String, Object> params, Boolean isRequestNeedPaging, AbstractQuery querier){
         PageResponse result = null;
-        if (isRequestNeedPaging && queryJobInfo.getIsSqlSupportAutoPaging()) { // step3.1 需要分页 且 支持自动分页查询
+        if (isRequestNeedPaging && queryJobInfo.getSqlSupportAutoPagable()) { // step3.1 需要分页 且 支持自动分页查询
             try {
                 result = querier.autoPagingQuery(queryJobInfo, params);
-            } catch (CommonException e) {
+            } catch (ApplicationRuntimeException e) {
                 throw new RuntimeException(e);
             } catch (SQLException e) {
                 logger.error("Fail to query dataset of datasource by paging!(queryJobInfo:{})", queryJobInfo);
@@ -87,7 +92,7 @@ public class QueryFactory {
         } else { // step3.2 无需分页 或 需要分页但只能手动分页(定制化分页/伪分页) [但: 此处只是查库，若需分页/手动分页，放在后置处理器进行]
             try {
                 result = querier.query(queryJobInfo, params);
-            } catch (CommonException e) {
+            } catch (ApplicationRuntimeException e) {
                 throw new RuntimeException(e);
             } catch (SQLException e) {
                 logger.error("Fail to query dataset of datasource by no-paging!(queryJobInfo:{})", queryJobInfo);
