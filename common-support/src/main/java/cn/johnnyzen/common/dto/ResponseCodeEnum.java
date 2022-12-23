@@ -1,7 +1,5 @@
 package cn.johnnyzen.common.dto;
 
-//import com.google.common.collect.Lists;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,17 +7,16 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @IDE: Created by IntelliJ IDEA.
- * @Author: 千千寰宇
- * @createDate: 2018/9/30  18:52:48
- * @modifyDate:
- *  2020-06-06 16:37 - zengtai
+ * @author 千千寰宇
+ * @createDate 2018/9/30  18:52:48
+ * @modifyDate
+ *  2020-06-06 16:37
  *      更换代码值及其意义
  *      实现Serializable接口
- * @Description: ...
+ * @description: ...
  */
 
-public enum ResultCodeEnum implements Serializable {
+public enum ResponseCodeEnum implements Serializable {
     /**
      * @description 操作符合操作预期
      * 2000-2999
@@ -76,23 +73,23 @@ public enum ResultCodeEnum implements Serializable {
     private int code=-1;
 
     /**
-     * @description 状态码的英文名
+     * @description 状态码的英文名，对应 CommonResponse.message
      */
     private String name;
 
     /**
-     * @description 对状态码的业务解释
+     * @description 对状态码的业务解释，对应 CommonResponse.operationExplain
      */
     public String explain;
 
-    ResultCodeEnum(int code, String name, String explain) {
+    ResponseCodeEnum(int code, String name, String explain) {
         this.code = code;
         this.name = name;
         this.explain = explain;
     }
 
-    public ResultCodeEnum findByCode(int code) {
-        for (ResultCodeEnum type : values()) {
+    public ResponseCodeEnum findByCode(int code) {
+        for (ResponseCodeEnum type : values()) {
             if (type.getCode() == code) {
                 return type;
             }
@@ -100,8 +97,8 @@ public enum ResultCodeEnum implements Serializable {
         return null;
     }
 
-    public ResultCodeEnum findByName(String name) {
-        for (ResultCodeEnum type : values()) {
+    public ResponseCodeEnum findByName(String name) {
+        for (ResponseCodeEnum type : values()) {
             if (type.getName().equals(name)) {
                 return type;
             }
@@ -112,7 +109,7 @@ public enum ResultCodeEnum implements Serializable {
     public static List<Map<String, Object>> toList() {
         //Lists.newArrayList()其实和 new ArrayList() 几乎一模一样
         List<Map<String, Object>> list = new ArrayList();
-        for (ResultCodeEnum item : ResultCodeEnum.values()) {
+        for (ResponseCodeEnum item : ResponseCodeEnum.values()) {
             Map<String, Object> map = new HashMap<String, Object>();
             map.put("code", item.getCode());
             map.put("name", item.getName());

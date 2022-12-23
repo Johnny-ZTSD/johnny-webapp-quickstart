@@ -17,7 +17,7 @@ import java.io.Serializable;
  */
 
 @ApiModel(value = "分页请求对象", description = "分页请求 Bean")
-public class PageRequest<T> extends BasePage implements Serializable {
+public class PageRequest<T> extends BasePage {
     private final static Logger LOG = LoggerFactory.getLogger(PageRequest.class);
 
     private static final long serialVersionUID = 3256652355L;
@@ -46,7 +46,13 @@ public class PageRequest<T> extends BasePage implements Serializable {
      * 是否需要分页
      */
     public boolean isNeedPaging(){
-        return (this.getCurrentPage() != null) && (this.getPageSize() != null);
+        if(this.getCurrentPage() != null && (this.getPageSize() != null) ){
+            if(this.getCurrentPage().equals(BasePage.MIN_CURRENT_PAGE) && this.getPageSize().equals(BasePage.MAX_PAGE_SIZE)){
+                return false;
+            }
+            return true;
+        }
+        return false;
     }
 
     public T getParams() {

@@ -20,7 +20,7 @@ import java.util.Map;
  */
 
 @ApiModel(value = "分页响应对象", description = "分页响应 Bean")
-public class PageResponse<T> extends BasePage implements Serializable {
+public class PageResponse<T> extends BasePage {
     private final static Logger LOG = LoggerFactory.getLogger(PageResponse.class);
 
     private static final long serialVersionUID = 3568235295235L;

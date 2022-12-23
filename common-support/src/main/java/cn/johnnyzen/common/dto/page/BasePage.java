@@ -16,10 +16,8 @@ import java.io.Serializable;
  *  [1] Serializable和serialVersionUID的意义是什么？ - CSDN - https://blog.csdn.net/weixin_30953203/article/details/114208684
  */
 
-public class BasePage implements Serializable {
+public class BasePage {
     private final static Logger LOG = LoggerFactory.getLogger(BasePage.class);
-
-    private static final long serialVersionUID = 2363895L;
 
     public final static Integer MIN_CURRENT_PAGE = 1;
 
