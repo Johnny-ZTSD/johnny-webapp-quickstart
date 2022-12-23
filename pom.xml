@@ -1,0 +1,818 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>cn.johnnyzen</groupId>
+    <artifactId>johnny-webapp-quickstart</artifactId>
+    <version>1.0-SNAPSHOT</version> <!-- 2020/11/10 00:54 -->
+
+    <packaging>pom</packaging>
+    <name>Johnny Webapp Quickstart</name>
+    <!-- FIXME change it to the project's website -->
+    <url>https://www.cnblogs.com/johnnyzen</url>
+
+    <!-- 注册 子模块 -->
+    <modules>
+        <module>Test-All</module>
+        <module>common-support</module>
+        <module>SpringMVC-Spring-MyBatis</module>
+        <module>study-design-patterns</module>
+        <module>study-springboot-mybatisplus</module>
+        <module>study-swagger</module>
+        <!-- ↓ SSM Demo Project ↓ -->
+        <module>password-book-app</module>
+        <module>kettle-sample</module>
+        <module>canal-sample</module>
+        <module>study-javase</module>
+        <module>study-hive</module>
+        <module>study-ssm</module>
+        <module>study-scala</module>
+        <module>study-spark</module>
+        <module>study-kafka</module>
+        <module>bigdata-datasets</module>
+        <module>study-feign</module>
+    </modules>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.build.outputEncoding>UTF-8</project.build.outputEncoding>
+        <java.version>1.8</java.version>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+
+        <junit.version>4.13.1</junit.version>
+        <slf4j.version>1.7.25</slf4j.version>
+
+        <jackson.version>2.13.0</jackson.version>
+        <fastjson.version>1.2.75</fastjson.version>
+        <xstream.version>1.4.16</xstream.version>
+        <dom4j.version>1.6.1</dom4j.version>
+        <snakeyaml.yml-file.version>1.26</snakeyaml.yml-file.version>
+
+        <xml-apis.version>1.4.01</xml-apis.version>
+
+        <commons-lang.version>2.6</commons-lang.version>
+        <commons-beanutils.version>1.9.3</commons-beanutils.version>
+        <commons-collections.version>3.2</commons-collections.version>
+        <commons-fileupload.version>1.3.1</commons-fileupload.version>
+        <commons-io.version>2.4</commons-io.version>
+        <hutool.version>5.8.4</hutool.version>
+
+        <org.aspectj.aspectjweaver.version>1.8.9</org.aspectj.aspectjweaver.version>
+
+        <!-- org.springframework:spring-core -->
+        <spring.version>5.2.15.RELEASE</spring.version>
+        <!-- spring-cloud , spring-cloud-alibaba , spring-boot 三者的兼容关系: https://github.com/alibaba/spring-cloud-alibaba/wiki/版本说明 -->
+        <spring-boot.version>2.3.12.RELEASE</spring-boot.version>
+        <spring-cloud.version>Hoxton.SR12</spring-cloud.version>
+        <spring-cloud-openfeign.version>2.2.9.RELEASE</spring-cloud-openfeign.version>
+        <spring-cloud-alibaba.version>2.2.7.RELEASE</spring-cloud-alibaba.version>
+
+        <nacos-config-spring-boot-starter.version>0.2.10</nacos-config-spring-boot-starter.version>
+
+        <!-- org.mybatis:mybatis -->
+        <mybatis.version>3.5.3</mybatis.version>
+        <!-- org.mybatis:mybatis-spring -->
+        <mybatis-spring.version>2.0.2</mybatis-spring.version>
+        <!-- com.baomidou:mybatis-plus or com.baomidou:mybatis-plus-boot-starter -->
+        <mybatis-plus.version>3.2.0</mybatis-plus.version>
+
+        <openfeign.version>10.4.0</openfeign.version>
+
+        <swagger.version>1.5.20</swagger.version> <!-- 1.5.20 / 2.0.0-rc2 -->
+        <springforx-swagger.version>2.9.2</springforx-swagger.version>
+        <swagger-bootstrap-ui.version>1.9.6</swagger-bootstrap-ui.version>
+
+        <guava.version>28.0-jre</guava.version>
+        <mysql.jdbc.version>8.0.28</mysql.jdbc.version>
+        <jedis.version>3.0.1</jedis.version>
+        <elasticsearch.version>7.12.0</elasticsearch.version>
+        <influxdb.jdbc.version>2.22</influxdb.jdbc.version>
+
+        <druid.dbpool.version>1.0.9</druid.dbpool.version>
+
+        <httpclient.version>4.5.10</httpclient.version>
+        <httpcore.version>4.4.12</httpcore.version>
+        <okhttp.version>4.7.2</okhttp.version>
+        <jsoup.version>1.10.2</jsoup.version>
+        <selenium.version>3.0.1</selenium.version>
+
+        <!-- 分页插件版本号 -->
+        <pagehelper.version>4.1.6</pagehelper.version>
+
+        <!-- JNA版本 -->
+        <!-- JNA（Java Native Access ）提供一组Java工具类用于在运行期间动态访问系统本地库（native library：如Window的dll）而不需要编写任何Native/JNI代码。开发人员只要在一个java接口中描述目标native library的函数与结构，JNA将自动实现Java接口到native function的映射。 -->
+        <jna.version>4.4.0</jna.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- # [1] Language-level Infrastructure(语言层基础设施) # -->
+
+            <!-- unit test dependency -->
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <!-- log dependency -->
+            <!-- Slf<Simple Logging Facade For Java> + Log4J -->
+            <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+            <!-- 实现方案1：Log4J -->
+            <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-log4j12 -->
+            <!-- slf4j与log4j的整合jar包 : 其将自动引入其log4j-xx.xx.xx.jar -->
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-log4j12</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+            <!-- 实现方案2：logback https://blog.csdn.net/qq_36110736/article/details/108066109-->
+            <!-- Logback是由log4j创始人设计的又一个开源日志组件。Logback当前分成3个模块：
+                Logback-core是其它两个模块的基础模块。
+                Logback-classic是log4j的一个 改良版本。此外Logback-classic完整实现SLF4J API使你可以很方便地更换成其它日志系统如log4j或JDK14 Logging
+                Logback-access访问模块与Servlet容器集成提供通过Http来访问日志的功能。
+            -->
+            <!--        <dependency>
+                        <groupId>ch.qos.logback</groupId>
+                        <artifactId>logback-classic</artifactId>
+                        <version>1.1.3</version>
+                        <scope>provided</scope>
+                       <exclusions>
+                            <exclusion>
+                                <artifactId>slf4j-api</artifactId>
+                                <groupId>org.slf4j</groupId>
+                            </exclusion>
+                        </exclusions>
+                    </dependency>-->
+
+            <!-- hutool - common util dependency -->
+            <!-- url: https://www.hutool.cn/ / https://www.hutool.cn/docs/ -->
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-all</artifactId>
+                <version>${hutool.version}</version>
+            </dependency>
+            <!-- Bouncy Castle Library (支持国密加密算法的库) -->
+            <!-- 在 hutools 4.2.1之后，Hutool 借助 Bouncy Castle库可以支持国密算法 -->
+            <!-- https://hutool.cn/docs/index.html#/crypto/%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86-SymmetricCrypto -->
+            <dependency>
+                <groupId>org.bouncycastle</groupId>
+                <artifactId>bcpkix-jdk15on</artifactId>
+                <version>1.60</version>
+            </dependency>
+
+            <!-- apache open source java language fundamental tools (like: java.lang)-->
+            <!-- Demo: org.apache.commons.lang.util包↓ -->
+            <!-- ArrayUtils / BitField / BooleanUtils / CharEncoding  / CharRange / CharSet / CharSetUtils / CharUtils / ClassUtils -->
+            <!-- ObjectUtils / RandomStringUtils / SerializationUtils / StringEscapeUtils / StringUtils / SystemUtils / Validate / WordUtils  -->
+            <!-- http://commons.apache.org/proper/commons-lang/download_lang.cgi -->
+            <!-- https://mvnrepository.com/artifact/commons-lang/commons-lang -->
+            <dependency>
+                <groupId>commons-lang</groupId>
+                <artifactId>commons-lang</artifactId>
+                <version>${commons-lang.version}</version>
+            </dependency>
+
+            <!-- Bean转换工具包: Apache-BeanUtils -->
+            <!-- https://mvnrepository.com/artifact/commons-beanutils/commons-beanutils -->
+            <dependency>
+                <groupId>commons-beanutils</groupId>
+                <artifactId>commons-beanutils</artifactId>
+                <version>${commons-beanutils.version}</version>
+            </dependency>
+
+            <!-- Map tools -->
+            <dependency>
+                <groupId>commons-collections</groupId>
+                <artifactId>commons-collections</artifactId>
+                <version>${commons-collections.version}</version>
+            </dependency>
+
+            <!-- file upload or download  -->
+            <dependency>
+                <groupId>commons-fileupload</groupId>
+                <artifactId>commons-fileupload</artifactId>
+                <version>${commons-fileupload.version}</version>
+            </dependency>
+            <!-- io -->
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons-io.version}</version>
+            </dependency>
+
+            <!-- handle yml file -->
+            <dependency>
+                <groupId>org.yaml</groupId>
+                <artifactId>snakeyaml</artifactId>
+                <version>${snakeyaml.yml-file.version}</version>
+                <scope>compile</scope>
+            </dependency>
+
+            <!-- # [2] Basic development framework(基础开发框架) # -->
+
+            <!-- [*] spring : object container management(对象容器管理) -->
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-beans</artifactId>
+                <scope>compile</scope>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-core</artifactId>
+                <scope>compile</scope>
+                <version>${spring.version}</version>
+            </dependency>
+            <!-- spring: context -->
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-context</artifactId>
+                <scope>compile</scope>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-context-support</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <!-- [*] spring : aop framework -->
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-aop</artifactId>
+                <scope>compile</scope>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-aspects</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.aspectj</groupId>
+                <artifactId>aspectjweaver</artifactId>
+                <version>${org.aspectj.aspectjweaver.version}</version>
+            </dependency>
+            <!--  [*] spring : web framework -->
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-web</artifactId>
+                <scope>compile</scope>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-webmvc</artifactId>
+                <scope>compile</scope>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-webflux</artifactId>
+                <scope>compile</scope>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-expression</artifactId>
+                <scope>compile</scope>
+                <version>${spring.version}</version>
+            </dependency>
+            <!-- [*] spring: tx(事务) -->
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-tx</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <!-- spring: jdbc (对原始 Jdbc API 对象的简单封装) -->
+            <!-- 加载: DataSourceTransactionManager等 -->
+            <!-- 提供的API: JdbcTemplate / HibernateTemplate / RedisTemplate / JmsTemplate -->
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-jdbc</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <!-- spring: test(Spring框架下对Junit单元测试的整合) -->
+            <!-- @RunWith(SpringJUnit4ClassRunner.class) -->
+            <!-- @ContextConfiguration(...) -->
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-test</artifactId>
+                <version>${spring.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <!-- # [3] Lightweight development Framework(轻量级开发框架) # -->
+
+            <!-- spring-boot : base-framework (对象容器管理; include: org.springframework:spring-core,spring-context) -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot</artifactId>
+                <scope>compile</scope>
+                <version>${spring-boot.version}</version>
+            </dependency>
+            <!-- [*] starter (include: org.springframework.boot:spring-boot) -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter</artifactId>
+                <scope>compile</scope>
+                <version>${spring-boot.version}</version>
+            </dependency>
+
+            <!-- [*] spring-boot : starter-for-web -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-web</artifactId>
+                <scope>compile</scope>
+                <version>${spring-boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-webflux</artifactId>
+                <version>${spring-boot.version}</version>
+            </dependency>
+
+            <!-- spring-boot : starter-for-jdbc -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-jdbc</artifactId>
+                <scope>compile</scope>
+                <version>${spring-boot.version}</version>
+            </dependency>
+
+            <!-- [*] spring-boot : all-dependencies (include: org.springframework.boot:spring-boot,spring-boot-starter,spring-boot-starter-web,spring-boot-starter-webflux,...)-->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <scope>compile</scope>
+                <version>${spring-boot.version}</version>
+            </dependency>
+            <!-- [*] spring-boot : parent (include: org.springframework.boot:spring-boot-dependencies) -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-parent</artifactId>
+                <scope>compile</scope>
+                <version>${spring-boot.version}</version>
+            </dependency>
+
+            <!-- # [4] Advanced Development Framework(高级开发框架) # -->
+
+            <!-- spring-cloud: build(sub-project: org.springframework.cloud:spring-cloud-build-dependencies,spring-cloud-dependencies-parent,spring-cloud-build-tools) -->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-build</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+            </dependency>
+            <!-- spring-cloud: commons-parent(parent-project: org.springframework.cloud:spring-cloud-build) -->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-commons-parent</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+            </dependency>
+            <!-- spring-cloud: context(parent-project: org.springframework.cloud:spring-cloud-commons-parent; includes: ...) -->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-context</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+            </dependency>
+            <!-- spring-cloud: commons(parent-project: org.springframework.cloud:spring-cloud-commons-parent; includes: ...) -->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-commons</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+            </dependency>
+            <!-- [*] spring-cloud: starter(parent-project: org.springframework.cloud:spring-cloud-commons-parent; include: org.springframework.boot:spring-boot-starter,spring-cloud-context,spring-cloud-commons) -->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+            </dependency>
+
+            <!-- # [5] Other auxiliary development frameworks(其他辅助开发框架) # -->
+
+            <!-- swagger -->
+            <!-- url: https://search.maven.org/artifact/io.swagger/swagger-annotations/2.0.0-rc2/bundle -->
+            <!--        <dependency>-->
+            <!--          <groupId>io.swagger</groupId>-->
+            <!--          <artifactId>swagger-annotations</artifactId>-->
+            <!--          <version>${swagger.version}</version>-->
+            <!--        </dependency>-->
+            <!-- springfox-swagger -->
+            <!-- 访问地址 http://localhost:port/<context-path>/swagger-ui.html -->
+            <!-- url: https://swagger.io/docs/ / https://swagger.io/docs/specification/2-0/basic-structure/ -->
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger2</artifactId>
+                <version>${springforx-swagger.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-api</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger-ui</artifactId>
+                <version>${springforx-swagger.version}</version>
+            </dependency>
+            <!-- swagger-bootstrap-ui -->
+            <!-- reference-doc:
+              https://blog.csdn.net/weixin_45630042/article/details/107416127
+              https://blog.csdn.net/qq_43446343/article/details/102984670 -->
+            <!-- 访问地址 http://localhost:port/<context-path>/doc.html -->
+            <!-- 如需要更好看的 swagger-ui 界面，可 切换为 本依赖 -->
+            <dependency>
+                <groupId>com.github.xiaoymin</groupId>
+                <artifactId>swagger-bootstrap-ui</artifactId>
+                <version>${swagger-bootstrap-ui.version}</version>
+            </dependency>
+
+            <!-- feign -->
+            <!-- 方式1: spring-cloud-starter -->
+            <!-- url: https://search.maven.org/remotecontent?filepath=org/springframework/cloud/spring-cloud-dependencies/Hoxton.SR12/spring-cloud-dependencies-Hoxton.SR12.pom -->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-openfeign</artifactId>
+                <version>${spring-cloud-openfeign.version}</version>
+            </dependency>
+            <!-- 方式2: offcial dependencies -->
+            <dependency>
+                <groupId>io.github.openfeign</groupId>
+                <artifactId>feign-core</artifactId>
+                <version>${openfeign.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.openfeign</groupId>
+                <artifactId>feign-slf4j</artifactId>
+                <version>${openfeign.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-api</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>io.github.openfeign</groupId>
+                <artifactId>feign-hystrix</artifactId>
+                <version>${openfeign.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-api</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>io.github.openfeign</groupId>
+                <artifactId>feign-java8</artifactId>
+                <version>${openfeign.version}</version>
+            </dependency>
+
+            <!-- nacos :注册中心 / 配置中心 -->
+            <!-- nacos 注册中心 能力 -->
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+                <version>${spring-cloud-alibaba.version}</version>
+            </dependency>
+            <!-- nacos 配置中心 能力 -->
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+                <version>${spring-cloud-alibaba.version}</version>
+            </dependency>
+            <!-- https://github.com/nacos-group/nacos-spring-boot-project/wiki/spring-boot-0.2.2-以及-0.1.2版本新功能使用手册 -->
+            <!-- 版本 0.2.x.RELEASE 对应的是 Spring Boot 2.x 版本; 版本 0.1.x.RELEASE 对应的是 Spring Boot 1.x 版本 -->
+            <!--        <dependency>
+                        <groupId>com.alibaba.boot</groupId>
+                        <artifactId>nacos-config-spring-boot-starter</artifactId>
+                        <version>${nacos-config-spring-boot-starter.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>com.alibaba.boot</groupId>
+                        <artifactId>nacos-discovery-spring-boot-starter</artifactId>
+                        <version>${nacos-discovery-spring-boot-starter.version}</version>
+                    </dependency>
+                    &lt;!&ndash; https://search.maven.org/artifact/com.alibaba.nacos/nacos-spring-context &ndash;&gt;
+                    <dependency>
+                        <groupId>com.alibaba.nacos</groupId>
+                        <artifactId>nacos-spring-context</artifactId>
+                        <version>1.1.0</version>
+                    </dependency>-->
+
+
+            <!-- # [6] Data access framework(数据访问框架) # -->
+
+            <!-- (6.1) database drivers -->
+
+            <!-- memory framework dependency -->
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava.version}</version>
+            </dependency>
+
+            <!-- MySQL - https://mvnrepository.com/artifact/org.mybatis/mybatis -->
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>${mysql.jdbc.version}</version>
+            </dependency>
+
+            <!-- Redis:Jedis (Redis database for Java) -->
+            <!-- https://mvnrepository.com/artifact/redis.clients/jedis -->
+            <dependency>
+                <groupId>redis.clients</groupId>
+                <artifactId>jedis</artifactId>
+                <version>${jedis.version}</version>
+            </dependency>
+
+            <!-- elasticsearch: https://mvnrepository.com/artifact/org.elasticsearch/elasticsearch -->
+            <dependency>
+                <groupId>org.elasticsearch</groupId>
+                <artifactId>elasticsearch</artifactId>
+                <version>${elasticsearch.version}</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/org.elasticsearch/elasticsearch-x-content -->
+            <dependency>
+                <groupId>org.elasticsearch</groupId>
+                <artifactId>elasticsearch-x-content</artifactId>
+                <version>${elasticsearch.version}</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/org.elasticsearch.client/elasticsearch-rest-high-level-client -->
+            <dependency>
+                <groupId>org.elasticsearch.client</groupId>
+                <artifactId>elasticsearch-rest-high-level-client</artifactId>
+                <version>${elasticsearch.version}</version>
+            </dependency>
+
+            <!-- influxdb datasource jdbc dependency -->
+            <dependency>
+                <groupId>org.influxdb</groupId>
+                <artifactId>influxdb-java</artifactId>
+                <version>${influxdb.jdbc.version}</version>
+            </dependency>
+
+            <!-- (6.2) connection pool(连接池，用来加载 DruidDataSource) -->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid</artifactId>
+                <version>${druid.dbpool.version}</version>
+            </dependency>
+
+            <!-- (6.3) ORM framework -->
+
+            <!-- mybatis - https://mvnrepository.com/artifact/org.mybatis/mybatis -->
+            <!-- 加载SqlSessionFactoryBean和MapperScannerConfigurer等 -->
+            <dependency>
+                <groupId>org.mybatis</groupId>
+                <artifactId>mybatis</artifactId>
+                <version>${mybatis.version}</version>
+            </dependency>
+
+            <!-- mybatis-spring (MyBatis 与 Spring 整合时的整合包) -->
+            <!-- http://mybatis.org/spring/zh/index.html -->
+            <!-- https://mvnrepository.com/artifact/org.mybatis/mybatis-spring -->
+            <dependency>
+                <groupId>org.mybatis</groupId>
+                <artifactId>mybatis-spring</artifactId>
+                <version>${mybatis-spring.version}</version>
+            </dependency>
+
+            <!--mybatis-plus-->
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-boot-starter</artifactId>
+                <version>${mybatis-plus.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-dependencies</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-autoconfigure</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-starter</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <!-- (6.4) Serialization processing framework(序列化框架) -->
+
+            <!-- json handle -->
+
+            <!-- jackson -->
+            <!-- url: https://search.maven.org/artifact/com.fasterxml.jackson.core/jackson-core/2.13.0/bundle -->
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-core</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-annotations</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+
+            <!-- fastjson -->
+            <!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>fastjson</artifactId>
+                <version>${fastjson.version}</version>
+            </dependency>
+
+            <!-- xstream: http://x-stream.github.io/download.html -->
+            <dependency>
+                <groupId>com.thoughtworks.xstream</groupId>
+                <artifactId>xstream</artifactId>
+                <version>${xstream.version}</version>
+            </dependency>
+
+            <!-- (6.5) Paging processing framework(分页处理框架) -->
+
+            <!-- Paging plug-in (分页插件) -->
+            <dependency>
+                <groupId>com.github.pagehelper</groupId>
+                <artifactId>pagehelper</artifactId>
+                <version>${pagehelper.version}</version>
+            </dependency>
+
+            <!-- # [7] file processing framework(文件处理框架) # -->
+
+            <!-- xml -->
+            <!-- Dom4J(开源XML解析包) - https://mvnrepository.com/artifact/dom4j/dom4j -->
+            <dependency>
+                <groupId>dom4j</groupId>
+                <artifactId>dom4j</artifactId>
+                <version>${dom4j.version}</version>
+            </dependency>
+            <!-- xml解析
+              解决在Tomcat中运行时遇到的异常:
+                Caused by: java.lang.NoClassDefFoundError: org/w3c/dom/ElementTraversal
+                Caused by: java.lang.ClassNotFoundException: org.w3c.dom.ElementTraversal -->
+            <dependency>
+                <groupId>xml-apis</groupId>
+                <artifactId>xml-apis</artifactId>
+                <version>${xml-apis.version}</version>
+            </dependency>
+
+            <!-- # [8] Network request and processing framework(网络请求与处理框架) # -->
+
+            <!-- (8.1) Java Servlet Web Basic Library (Java Web 基础库) -->
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>jstl</artifactId>
+                <version>1.2</version>
+            </dependency>
+            <!-- HttpServletRequest / HttpServletRequestWrapper / HttpServletResponse / ... -->
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>servlet-api</artifactId>
+                <version>2.5</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>javax.servlet-api</artifactId>
+                <version>4.0.1</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>jsp-api</artifactId>
+                <version>2.0</version>
+            </dependency>
+            <dependency>
+                <groupId>taglibs</groupId>
+                <artifactId>standard</artifactId>
+                <version>1.1.2</version>
+            </dependency>
+
+            <!-- (8.2) network request(网络请求) -->
+
+            <!-- HttpClient - https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient</artifactId>
+                <version>${httpclient.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpcore</artifactId>
+                <version>${httpcore.version}</version>
+            </dependency>
+
+            <!-- okhttp - https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp -->
+            <dependency>
+                <groupId>com.squareup.okhttp3</groupId>
+                <artifactId>okhttp</artifactId>
+                <version>${okhttp.version}</version>
+            </dependency>
+
+            <!-- jsoup(html解析) https://mvnrepository.com/artifact/org.jsoup/jsoup -->
+            <dependency>
+                <groupId>org.jsoup</groupId>
+                <artifactId>jsoup</artifactId>
+                <version>${jsoup.version}</version>
+            </dependency>
+
+            <!-- selenium -->
+            <!-- 2019年毕设中采用的方式 -->
+            <!-- org.openqa.selenium.chrome.ChromeDriver/WebDriver -->
+            <!-- chrome driver download : https://npm.taobao.org/mirrors/chromedriver/ -->
+            <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java -->
+            <dependency>
+                <groupId>org.seleniumhq.selenium</groupId>
+                <artifactId>selenium-java</artifactId>
+                <version>${selenium.version}</version>
+            </dependency>
+            <!-- selenium-java 内部依赖: selenium-chrome-driver:pom:3.0.1 -->
+            <!-- 但 远程仓库 spring-alirepo 不存在3.0.1 版本的JAR包，可能会出现如下错误:
+                    Could not find artifact org.seleniumhq.selenium:selenium-chrome-driver:pom:3.0.1 in spring-alirepo (https://maven.aliyun.com/repository/spring)
+                 解决办法: 在如下链接手动下载此JAR包和pom等相关文件到本地仓库 或 Maven中启用全球中央仓库 https://repo1.maven.org/maven2/ -->
+            <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-chrome-driver -->
+            <dependency>
+                <groupId>org.seleniumhq.selenium</groupId>
+                <artifactId>selenium-chrome-driver</artifactId>
+                <version>${selenium.version}</version>
+            </dependency>
+            <!-- selenium - plan B (替代 selenium-java 的一种方式) (本JAR包的3.x版本需手动下载) -->
+            <!-- org.openqa.selenium.chrome.ChromeDriver/WebDriver -->
+            <!-- chrome driver download : https://npm.taobao.org/mirrors/chromedriver/ -->
+            <!-- download this jar by manual: http://selenium-release.storage.googleapis.com/index.html -->
+            <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-server-standalone -->
+            <!--        <dependency>
+                        <groupId>org.seleniumhq.selenium</groupId>
+                        <artifactId>selenium-server-standalone</artifactId>
+                        <version>2.53.0</version>
+                    </dependency>-->
+
+            <!-- # [Y] The custom library(自定义库) -->
+            <dependency>
+                <groupId>cn.johnnyzen</groupId>
+                <artifactId>common-support</artifactId>
+                <version>1.0-SNAPSHOT</version>
+                <scope>compile</scope>
+            </dependency>
+
+            <!-- # [X] Other(其他) # -->
+
+            <!-- 监控硬件与操作系统的开源工具 OSHI -->
+            <!-- JAVA通过oshi获取系统和硬件信息 https://www.cnblogs.com/songxingzhu/p/9107878.html -->
+            <!-- https://mvnrepository.com/artifact/com.github.oshi/oshi-core -->
+            <dependency>
+                <groupId>com.github.oshi</groupId>
+                <artifactId>oshi-core</artifactId>
+                <version>3.5.0</version>
+            </dependency>
+            <!-- 引入如下2个包(jna 和 jna-platform), 是为了解决: java.lang.NoSuchMethodError: com.sun.jna.platform.win32.OleAuto.VariantClear(Lcom/sun/jna/platform/win32/Variant$VARIANT;)Lcom/sun/jna/platform/win32/WinNT$HRESULT; -->
+            <!-- reference link: https://blog.csdn.net/qq_23296327/article/details/104673383 服务器监测开发OSHI java.lang.NoClassDefFoundError: com/sun/jna/platform/win32/VersionHelpers -->
+            <!-- reference link: https://github.com/oshi/oshi/pull/1091/commits/c7ac6e30798574dcfc1dc842b829dfc6b58ff0ab Best effort at resolving or documenting JNA dependency issues #1091 - Github/oshi/oshi -->
+            <dependency>
+                <groupId>net.java.dev.jna</groupId>
+                <artifactId>jna</artifactId>
+                <version>${jna.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.java.dev.jna</groupId>
+                <artifactId>jna-platform</artifactId>
+                <version>${jna.version}</version>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+    <repositories>
+        <!-- 在pom.xml中添加 项目级的远程仓库， 项目中的所有依赖将优先从 项目中的远程仓库 去下载，而再非 settins.xml 中配置的远程仓库 -->
+    </repositories>
+</project>
