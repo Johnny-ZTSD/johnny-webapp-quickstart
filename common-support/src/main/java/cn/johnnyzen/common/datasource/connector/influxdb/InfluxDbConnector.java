@@ -7,6 +7,7 @@ package cn.johnnyzen.common.datasource.connector.influxdb;
 
 import cn.johnnyzen.common.datasource.connector.AbstractConnector;
 import cn.johnnyzen.common.datasource.entity.DataSource;
+import cn.johnnyzen.common.dto.ResponseCodeEnum;
 import cn.johnnyzen.common.exception.ApplicationRuntimeException;
 import okhttp3.OkHttpClient;
 import org.influxdb.InfluxDB;
@@ -101,7 +102,7 @@ public class InfluxDbConnector extends AbstractConnector<InfluxDB> {
     public QueryResult query(String querySql, Map<String, Object> params) throws ApplicationRuntimeException {
         QueryResult queryResult = null;
         if (StringUtils.isEmpty(querySql)) {
-            throw new ApplicationRuntimeException(ApplicationErrorCodeEnum.QUERY_SQL_IS_EMPTY);
+            throw new ApplicationRuntimeException(ResponseCodeEnum.QUERY_SQL_IS_EMPTY);
         } else {
             InfluxDB connection = this.getConnection();
             String database = (String) params.get(DataSource.PARAM_DATABASE);
@@ -118,7 +119,7 @@ public class InfluxDbConnector extends AbstractConnector<InfluxDB> {
     @Override
     public QueryResult query(String querySql) throws ApplicationRuntimeException {
         if (StringUtils.isEmpty(querySql)) {
-            throw new ApplicationRuntimeException(ApplicationErrorCodeEnum.QUERY_SQL_IS_EMPTY);
+            throw new ApplicationRuntimeException(ResponseCodeEnum.QUERY_SQL_IS_EMPTY);
         } else {
             InfluxDB connection = this.getConnection();
             return connection.query(new Query(querySql));

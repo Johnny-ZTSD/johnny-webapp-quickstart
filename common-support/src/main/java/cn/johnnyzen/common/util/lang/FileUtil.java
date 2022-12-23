@@ -24,9 +24,8 @@ import java.util.Objects;
 import java.util.regex.Pattern;
 
 /**
- * @author 408675 (tai.zeng@seres.cn)
+ * @author johnnyzen
  * @version v1.0
- * @project bdp_common_data_service
  * @create-time 2022/11/10 14:59
  * @description ...
  */

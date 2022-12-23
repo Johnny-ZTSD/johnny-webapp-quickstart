@@ -1,5 +1,7 @@
 package cn.johnnyzen.common.config;
 
+import cn.johnnyzen.common.util.i18n.LocalMessageUtil;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
@@ -10,5 +12,8 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class SpringBeanConfig {
-
+    @Bean
+    public LocalMessageUtil localMessageUtil(){
+        return new LocalMessageUtil();
+    }
 }

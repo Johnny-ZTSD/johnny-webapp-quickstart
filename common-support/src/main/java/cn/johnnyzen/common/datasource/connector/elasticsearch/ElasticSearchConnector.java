@@ -2,6 +2,7 @@ package cn.johnnyzen.common.datasource.connector.elasticsearch;
 
 import cn.johnnyzen.common.datasource.connector.AbstractConnector;
 import cn.johnnyzen.common.datasource.entity.DataSource;
+import cn.johnnyzen.common.dto.ResponseCodeEnum;
 import cn.johnnyzen.common.exception.ApplicationRuntimeException;
 import cn.johnnyzen.common.util.io.net.UrlUtil;
 import org.slf4j.Logger;
@@ -111,7 +112,7 @@ public class ElasticSearchConnector extends AbstractConnector<Connection> {
             return this.getPreparedStatement(querySql).executeQuery();
         } catch (SQLException e) {
             logger.error("Fail to query data from mysql! querySql is: {}, Exception information as follows: {}", querySql, e);
-            throw new ApplicationRuntimeException(ApplicationErrorCodeEnum.DATABASE_QUERY_ERROR.getErrorCode(), ApplicationErrorCodeEnum.DATABASE_QUERY_ERROR.getErrorMessage());
+            throw new ApplicationRuntimeException(ResponseCodeEnum.DATABASE_QUERY_ERROR.toString());
         }
     }
 

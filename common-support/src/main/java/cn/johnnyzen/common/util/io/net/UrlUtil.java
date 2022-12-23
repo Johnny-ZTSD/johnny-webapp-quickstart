@@ -6,9 +6,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * @author 408675 (tai.zeng@seres.cn)
+ * @author johnnyzen
  * @version v1.0
- * @project bdp_common_data_service
  * @create-time 2022/12/12 11:53
  * @description ...
  */

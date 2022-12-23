@@ -5,9 +5,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * @author 408675 (tai.zeng@seres.cn)
+ * @author johnnyzen
  * @version v1.0
- * @project bdp-data-service-parent
  * @create-date 2022/8/19 17:58
  * @description
  * @referenc-doc

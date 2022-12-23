@@ -8,7 +8,7 @@ import javax.annotation.Resource;
 /**
  * 国际化工具
  */
-@Component
+//@Component
 public class LocalMessageUtil {
 
     @Resource

@@ -13,9 +13,8 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
 /**
- * @author 408675 (tai.zeng@seres.cn)
+ * @author johnnyzen
  * @version v1.0
- * @project bdp_common_data_service
  * @create-time 2022/12/23 18:18
  * @description ...
  */

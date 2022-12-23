@@ -1,9 +1,8 @@
 package cn.johnnyzen.common.util.lang;
 
 /**
- * @author 408675 (tai.zeng@seres.cn)
+ * @author johnnyzen
  * @version v1.0
- * @project bdp-data-service-parent
  * @create-time 2022/10/3 16:01
  * @description ...
  */
