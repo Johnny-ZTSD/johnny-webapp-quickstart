@@ -1,4 +1,4 @@
-package cn.johnnyzen.common.string;
+package cn.johnnyzen.common.util.lang;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,5 +57,33 @@ public class StringUtil {
         }
 
         return stringBuilder.toString();
+    }
+
+    /**
+     * 求字符串差集
+     * 注1:方向，仅支持从前往后求差集
+     * 注2:必须满足 一个字符串是另一个字符串的子集，如果不是子集，结果将出错
+     *
+     * @param strA
+     * @param strB
+     */
+    public static String minus(String strA, String strB) {
+        if (strA == null) {
+            return null;
+        }
+        if (strB == null) {
+            return null;
+        }
+        int compare = strA.compareTo(strB);
+        LOG.debug("compare:" + (compare) + " <" + strA + " : " + strB + ">");
+        int lenA = strA.length();
+        int lenB = strB.length();
+        if (compare == 0) { //相等
+            return "";
+        } else if (compare < 0) {//A更小或者更短
+            return strB.substring(lenB + compare);
+        } else {//B更长或者更大
+            return strA.substring(lenA - compare);
+        }
     }
 }

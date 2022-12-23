@@ -1,4 +1,4 @@
-package cn.johnnyzen.common.reuslt;
+package cn.johnnyzen.common.dto;
 
 //import com.google.common.collect.Lists;
 

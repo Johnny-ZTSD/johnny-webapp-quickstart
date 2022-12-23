@@ -64,6 +64,11 @@
             <artifactId>spring-context</artifactId>
             <version>${spring.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
 
         <!-- spring boot -->
         <dependency>
@@ -71,6 +76,14 @@
             <artifactId>spring-boot-autoconfigure</artifactId>
             <version>${spring-boot.version}</version>
             <scope>compile</scope>
+        </dependency>
+
+        <!-- spring-cloud -->
+        <!-- nacos 配置中心 能力 -->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+            <version>${spring-cloud-alibaba.version}</version>
         </dependency>
 
         <!-- swagger -->
@@ -111,6 +124,42 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
+        </dependency>
+
+        <!--clickhousedatasourcejdbcdependency-->
+        <!--https://search.maven.org/artifact/ru.yandex.clickhouse/clickhouse-jdbc-->
+        <dependency>
+            <groupId>com.clickhouse</groupId>
+            <artifactId>clickhouse-jdbc</artifactId>
+            <version>${clickhouse.jdbc.version}</version>
+        </dependency>
+
+        <!--redisdatasourcejdbcdependency-->
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>${redis.jdbc.version}</version>
+        </dependency>
+
+        <!-- influxdb datasource jdbc dependency -->
+        <dependency>
+            <groupId>org.influxdb</groupId>
+            <artifactId>influxdb-java</artifactId>
+            <version>${influxdb.jdbc.version}</version>
+        </dependency>
+
+        <!--neo4j(graphdatabase)-->
+        <dependency>
+            <groupId>org.neo4j.driver</groupId>
+            <artifactId>neo4j-java-driver</artifactId>
+            <version>${neo4j.jdbc.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka-clients</artifactId>
+            <version>${kafka.clients.version}</version>
+            <scope>compile</scope>
         </dependency>
 
     </dependencies>

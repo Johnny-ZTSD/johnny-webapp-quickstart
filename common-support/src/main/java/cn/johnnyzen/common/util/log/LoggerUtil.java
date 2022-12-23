@@ -1,4 +1,4 @@
-package cn.johnnyzen.common.util;
+package cn.johnnyzen.common.util.log;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

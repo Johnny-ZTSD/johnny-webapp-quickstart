@@ -1,6 +1,7 @@
 package cn.johnnyzen.common.util;
 
 import cn.johnnyzen.common.util.debug.Print;
+import cn.johnnyzen.common.util.lang.CollectionUtil;
 import org.junit.Test;
 
 import java.util.HashMap;

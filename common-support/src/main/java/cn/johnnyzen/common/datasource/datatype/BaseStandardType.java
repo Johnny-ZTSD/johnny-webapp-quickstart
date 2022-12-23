@@ -1,4 +1,4 @@
-package cn.johnnyzen.common.datatype;
+package cn.johnnyzen.common.datasource.datatype;
 
 /**
  * 基础标准字段类型

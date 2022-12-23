@@ -1,4 +1,4 @@
-package cn.johnnyzen.common.datatype;
+package cn.johnnyzen.common.datasource.datatype;
 
 import java.util.ArrayList;
 import java.util.List;

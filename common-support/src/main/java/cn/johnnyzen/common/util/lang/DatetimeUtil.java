@@ -1,20 +1,21 @@
-package cn.johnnyzen.common.util;
+package cn.johnnyzen.common.util.lang;
+
+import org.springframework.util.StringUtils;
 
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Johnny Zen
  * @create-time 2018/11/4  00:39:44
- * @description: A Tools of Datetime Conversion & Handle
+ * @description A Tools of Datetime Conversion & Handle
  * Calendar / Date / (datetime) String / Long / Timestamp
- * @reference-doc:  https://blog.csdn.net/haqer0825/article/details/7034920
- *              https://www.cnblogs.com/zhengwanmeixiansen/p/7391411.html
+ * @reference-doc
+ *  [0] java中String Date Timestamp Calendar 之间的关系及转换 - CSDN - https://blog.csdn.net/haqer0825/article/details/7034920
+ *  [1] JAVA字符串转日期或日期转字符串 - CNBLOGS - https://www.cnblogs.com/zhengwanmeixiansen/p/7391411.html
+ *  [2] java 不同时区转换 - CSDN - https://blog.csdn.net/qq_41344974/article/details/125505290
  */
 
 public class DatetimeUtil {
@@ -132,6 +133,50 @@ public class DatetimeUtil {
         return timestampToLong(stringToTimestamp(dateStr));
     }
 
+
+    /**
+     *
+     *@param datetimeStr
+     * eg:
+     *  "2022-10-0611:49:00"
+     *  "2022-10-0611:49"
+     *  "2022-10-08T07:01:40.751Z"
+     *@param format
+     * eg:
+     *  "yyyy-MM-ddhh:mm:ss"
+     *  "yyyy-MM-ddhh:mm"
+     *  "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'" | T代表可替换的任意字符, Z代表时区
+     *@param timeZone [选填参数] 允许为 null
+     * 可选值有:
+     *  "UTC" / "Asia/Shanghai" / "GMT" / "GMT+08:00" / ...
+     *@return
+     * eg:
+     *  1665028140000L
+     *  1665028140000L
+     *  1665212500751L [timeZone=UTC] 1665183700751L [timeZone=null]
+     *@reference-doc
+     * [1]java不同时区转换 - CSDN - https://blog.csdn.net/qq_41344974/article/details/125505290
+     */
+    public static long stringToLong(String datetimeStr,String format,String timeZone){
+        SimpleDateFormat formatSDF = new SimpleDateFormat(format);//suchas"yyyyMMddhhmmss"
+//newSimpleDateFormat(format,Locale.getDefault());//suchas"yyyyMMddhhmmss"
+        if(!StringUtils.isEmpty(timeZone)){
+            formatSDF.setTimeZone(TimeZone.getTimeZone(timeZone));
+        }
+        Date date=null;
+        try{
+            date = formatSDF.parse(datetimeStr);
+            return date.getTime();
+        }catch(ParseException e){
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    public static long stringToLong(String datetimeStr,String format){
+        return stringToLong(datetimeStr, format, null);
+    }
+
     /**
      * Timestamp to String
      * @param timestamp
@@ -206,11 +251,5 @@ public class DatetimeUtil {
             resultMap.put("second", second);
         }
         return resultMap;
-    }
-
-    public static void main(String[] args) {
-        System.out.println(DatetimeUtil.calendarToString(DatetimeUtil.longToCalendar(DatetimeUtil.currentTimeMillis()), "yyyy-MM-dd hh:mm:ss"));
-        System.out.println(DatetimeUtil.dateToLong(new Date()));//1618802845551 (length=13)
-        System.out.println(DatetimeUtil.longToDate(DatetimeUtil.dateToLong(new Date())));//Mon Apr 19 11:27:25 CST 2021
     }
 }

@@ -1,8 +1,8 @@
 package cn.johnnyzen.common.util;
 
-import cn.johnnyzen.common.datatype.BaseStandardType;
-import cn.johnnyzen.common.datatype.FieldFormatEnum;
-import cn.johnnyzen.common.exception.BusinessException;
+import cn.johnnyzen.common.datasource.datatype.BaseStandardType;
+import cn.johnnyzen.common.datasource.datatype.FieldFormatEnum;
+import cn.johnnyzen.common.exception.ApplicationRuntimeException;
 
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
@@ -600,7 +600,7 @@ public abstract class Tools {
 
             }
         } catch (Exception e) {
-            throw new BusinessException("获取数据源唯一摘要出错");
+            throw new ApplicationRuntimeException("获取数据源唯一摘要出错");
         }
         return ret.toString();
     }
