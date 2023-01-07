@@ -24,7 +24,7 @@ public class LoadLocalFileTest {
         ClassLoader classLoader = ClassLoaderUtil.getContextClassLoader();
 
         //从 ClassLoader 对应的 classpath 下寻找对应文件
-        InputStream inputStream = classLoader.getResourceAsStream("messages_zh_CN.properties");
+        InputStream inputStream = classLoader.getResourceAsStream("i18n/messages_zh_CN.properties");
 
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream)); //; new BufferedReader(new InputStreamReader(System.in));
         String line = null;

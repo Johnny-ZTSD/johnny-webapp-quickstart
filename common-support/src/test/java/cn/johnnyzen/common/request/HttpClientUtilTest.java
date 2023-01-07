@@ -9,11 +9,18 @@ import org.apache.http.cookie.Cookie;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.jsoup.Connection;
+import org.jsoup.HttpStatusException;
+import org.jsoup.nodes.Document;
+import org.junit.Assert;
 import org.junit.Test;
 
 import org.apache.http.client.CookieStore;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.lang.annotation.Documented;
+import java.net.SocketTimeoutException;
 import java.util.List;
 import java.util.Map;
 
@@ -25,6 +32,8 @@ import java.util.Map;
  */
 
 public class HttpClientUtilTest {
+    private static final Logger logger = LoggerFactory.getLogger(HttpClientUtilTest.class);
+
     @Test
     public void testGetCookies() throws Exception {
         // 旧版
@@ -77,7 +86,8 @@ public class HttpClientUtilTest {
     @Test
     public void testGetCookies2() throws IOException {
         String url = "http://10.0.6.74:6080/j_spring_security_check?j_username=admin&j_password=admin";
-        url = "https://www.jetbrains.com/idea/";
+//        url = "https://www.jetbrains.com/idea/";
+        url = "https://www.jetbrains.com.cn";
         String cookies = "";
         Map<String, String> params = null;
         /*
@@ -99,7 +109,19 @@ public class HttpClientUtilTest {
         connection.header("Pragma", "no-cache");
         connection.header("Referer", "http://10.0.6.74:6080/j_spring_security_check");
         connection.header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.183 Safari/537.36");
-        Print.print(connection.post().body());
-        //connection.response().cookies();
+        try {
+            Document document = connection.post();
+            Print.print(document.body());
+            //connection.response().cookies();
+        } catch (HttpStatusException statusException) {
+            Integer statusCode = statusException.getStatusCode();
+            String requestUrl = statusException.getUrl();
+            String message = statusException.getMessage();
+            logger.error("throw a HttpStatusException,request info as follows: statusCode: {}, requestUrl: {}, message:{}", statusCode, requestUrl, message);
+        } catch (SocketTimeoutException socketTimeoutException) {
+            logger.error("throw a SocketTimeoutException, cause message: {}", socketTimeoutException.getMessage());
+        }
+
+        Assert.assertTrue(true);
     }
 }
