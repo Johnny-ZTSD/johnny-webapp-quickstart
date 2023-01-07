@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+       xmlns:cache="http://www.springframework.org/schema/cache"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/task
+        http://www.springframework.org/schema/tx/spring-task.xsd
+        http://www.springframework.org/schema/jdbc
+        http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
+        http://www.springframework.org/schema/cache
+        http://www.springframework.org/schema/cache/spring-cache.xsd
+        http://www.springframework.org/schema/util
+        http://www.springframework.org/schema/util/spring-util.xsd">
+    <!-- 加载 aop or 拦截策略 -->
+
+    <!-- [可选] aspectj 支持自动代理实现AOP功能 -->
+    <aop:aspectj-autoproxy proxy-target-class="true" />
+
+<!--    <bean id="logAdvice" class="cn.johnnyzen.study.ssm.passwordbook.common.advice.LogAdvice"/>
+    <aop:config>
+        <aop:pointcut id="userPoint" expression="execution(* cn.johnnyzen.study.ssm.passwordbook.user.service.*.*(..))"/>
+        <aop:aspect ref="logAdvice">
+            <aop:after method="after" pointcut-ref="userPoint"/>
+            <aop:before method="before" pointcut-ref="userPoint"/>
+        </aop:aspect>
+    </aop:config>-->
+
+
+    <!-- (数据库) 事务管理器 :
+        属性                     /类型               /默认值                       /说明
+        propagation	            Propagation枚举	    REQUIRED	                事务传播属性
+        isolation	            isolation枚举	    DEFAULT(所用数据库默认级别)	事务隔离级别
+        readOnly	            boolean	            false	                    是否才用优化的只读事务
+        timeout	                int	                -1	                        超时(秒)
+        rollbackFor	            Class[]	            {}	                        需要回滚的异常类
+        rollbackForClassName	String[]	        {}	                        需要回滚的异常类名
+        noRollbackFor	        Class[]	            {}	                        不需要回滚的异常类
+        noRollbackForClassName	String[]	        {}	                        不需要回滚的异常类名
+
+        tx:advice 属性详解 => https://blog.csdn.net/qq_35626763/article/details/80507921
+        Spring入门——事务管理Transaction Manager => https://www.jianshu.com/p/7c6d4dbbe8fc
+    -->
+    <!-- Hibernate 事务 -->
+<!--
+    <bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory" />
+    </bean>
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="get*" propagation="SUPPORTS" isolation="DEFAULT" read-only="true" />
+            <tx:method name="find*" propagation="SUPPORTS" isolation="DEFAULT" read-only="true" />
+            <tx:method name="load*" propagation="SUPPORTS" isolation="DEFAULT" read-only="true" />
+            <tx:method name="*" propagation="REQUIRED" rollback-for="java.lang.Exception" />
+        </tx:attributes>
+    </tx:advice>  -->
+</beans>

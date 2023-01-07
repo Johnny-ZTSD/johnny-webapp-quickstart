@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+       xmlns:cache="http://www.springframework.org/schema/cache"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/task
+        http://www.springframework.org/schema/tx/spring-task.xsd
+        http://www.springframework.org/schema/jdbc
+        http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
+        http://www.springframework.org/schema/cache
+        http://www.springframework.org/schema/cache/spring-cache.xsd
+        http://www.springframework.org/schema/util
+        http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <!-- 自动扫描 -->
+    <!--<context:component-scan base-package="cn.johnnyzen.study.ssm.passwordbook" />-->
+
+    <!-- 【Spring 与 Mybatis 整合方式 1 - SqlSessionFactoryBean + MapperFactoryBean
+        (通过它来创建SqlSession(SqlSessionTemplate))】 -->
+    <!-- step1 创建SqlSessionFactory，同时指定数据源-->
+<!--    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+    </bean>-->
+    <!-- step2 创建数据映射器，数据映射器必须为接口-->
+    <!-- 以下XML配置等效于
+            @Repository("userMapper")
+            public class UserMapperImpl implements IUserMapper -->
+    <!--<bean id="userMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+        <property name="mapperInterface" value="cn.johnnyzen.hiyusite.user.mapper.UserMapper" />
+        <property name="sqlSessionFactory" ref="sqlSessionFactory" />
+    </bean>-->
+
+
+
+    <!-- 【Spring 与 Mybatis 整合方式 2 - SqlSessionFactoryBean (+ mybatis-config.xml(含配置<mapper>)) + SqlSessionTemplate + xxMapper.java(Bean)
+            (通过它来创建SqlSession(SqlSessionTemplate))】 -->
+    <!-- step1 创建SqlSessionFactory，同时指定数据源-->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <!--指定实体类映射文件，可同时指定某一包以及子包下面的所有配置文件
+            mapperLocations和configLocation有1个即可
+            当需要为实体类指定别名时，可指定configLocation属性，再在mybatis总配置文件中采用mapper引入实体类映射文件 -->
+        <!-- 自动扫描mapping.xml文件 -->  <!--com/cn/hnust/mapping/*.xml-->
+        <!-- 当mybatis的xml文件和mapper接口不在相同包下时，需用mapperLocations属性指定xml文件的路径。 -->
+        <!-- *是通配符，代表所有的文件，**代表所有目录下 -->
+        <!--<property name="mapperLocations" value="classpath:cn/johnnyzen/mapping/*.xml"></property>-->
+        <!--<property name="mapperLocations" value="classpath:cn/johnnyzen/**"></property>-->
+        <property name="mapperLocations">
+            <array>
+                <!--<value>classpath:cn/johnnyzen/hiyusite/**</value>-->
+                <!--<value>classpath:cn/johnnyzen/hiyusite/user/mapper/*.xml</value>-->
+                <value>classpath:cn/johnnyzen/dataset/bigdata/**</value>
+            </array>
+        </property>
+        <!-- 配置总(全局)配置文件(mybatis-config.xml(含配置<mapper>))，指定的environment在spring容器中不再生效-->
+        <property name="configLocation" value="classpath:/db/mybatis-config.xml" />
+        <!--<property name="typeAliasesPackage" value="com.autonavi.domain" />-->
+    </bean>
+    <!-- step2 SqlSessionTemplate : 其继承自 SqlSession，只不过被 mybatis.spring封装了一下 -->
+    <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg index="0" ref="sqlSessionFactory" />
+    </bean>
+    <!-- step3 声明 xxMapper类的Bean对象(即 DAO类对象)，也可用Spring注解(@Repository等)创建 -->
+    <!--       此处配置的 userMapper 仅仅将UserMapper.java类对象的Bean生命周期管理托管给Spring IOC容器；
+               而 UserMapper.java 与 UserMapper.xml的映射，依旧需依赖于mybatis-config.xml:<mapper>的设置，
+               否则，必然报出此错:BindingException: Type interface xx.BookMapper is not known to the MapperRegistry.-->
+<!--    <bean id="userMapper" class="cn.johnnyzen.study.ssm.passwordbook.user.mapper.impl.UserMapperImpl">
+        <property name="sqlSession" ref="sqlSession" />
+    </bean>-->
+    <bean id="bookMapper" class="cn.johnnyzen.study.ssm.passwordbook.book.mapper.impl.BookMapperImpl">
+        <property name="sqlSession" ref="sqlSession" />
+    </bean>
+
+    <!-- 【Spring 与 Mybatis 整合方式 3 - SqlSessionFactoryBean (+ mybatis-config.xml) + SqlSessionTemplate +  + xxMapper.java (extends SqlSessionDaoSupport)
+            (通过它来创建SqlSession(SqlSessionTemplate))】 -->
+    <!-- step1 创建SqlSessionFactory，同时指定数据源-->
+<!--    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property  name="configLocation"  value="classpath:/db/mybatis-config.xml"/>
+        &lt;!&ndash; <property  name="mapperLocations"  value="classpath*:com/xxt/ibatis/dbcp/domain/user.map.xml"/   >  &ndash;&gt;
+    </bean>-->
+    <!-- step2 创建 SqlSessionTemplate : 其继承自 SqlSession，只不过被 mybatis.spring封装了一下 -->
+<!--    <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg index="0" ref="sqlSessionFactory" />
+    </bean>-->
+    <!-- step3 声明 xxMapper类的Bean对象(即 DAO类对象)，也可用Spring注解(@Repository等)创建 -->
+    <!-- public class BookMapperImpl extends SqlSessionDaoSupport implements IBookMapper -->
+    <!-- SqlSessionDaoSupport: 对 SqlSessionTemplate 的封装，内部含 getSqlSession()方法，故而需要注入 sqlSessionTemplate -->
+<!--    <bean id="bookMapper" class="cn.johnnyzen.hiyusite.book.mapper.impl.BookMapperImplBySqlSessionDaoSupport">
+        &lt;!&ndash;注入 SqlSessionTemplate 实例 &ndash;&gt;
+        &lt;!&ndash; 对应xxxMapper类的属性(sqlSessionTemplate) 需有对应的getter/setter方法 &ndash;&gt;
+        <property name="sqlSessionTemplate" ref="sqlSession" />
+        &lt;!&ndash;也可直接注入SqlSessionFactory实例，二者都指定时，SqlSessionFactory失效 &ndash;&gt;
+        &lt;!&ndash; <property name="sqlSessionFactory" ref="sqlSessionFactory" /> &ndash;&gt;
+    </bean>-->
+
+    <!-- 【Spring 与 Mybatis 整合方式 4 [不推荐]- SqlSessionFactoryBean + MapperScannerConfigurer  + xxMapper.java/xxMapper.xml
+        (通过它来创建SqlSession(SqlSessionTemplate))】 -->
+    <!-- step1 创建SqlSessionFactory，同时指定数据源-->
+<!--    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        &lt;!&ndash; <property  name="mapperLocations"  value="classpath*:com/xxt/ibatis/dbcp/domain/user.map.xml"/   >  &ndash;&gt;
+    </bean>-->
+    <!--step2 配置 MapperScannerConfigurer : 为了代替手工使用 SqlSessionDaoSupport 或 SqlSessionTemplate 编写数据访问对象 (DAO)的代码,MyBatis-Spring 提供了1个动态代理的实现(MapperFactoryBean) -->
+    <!-- MapperFactoryBean : 可让开发者直接注入数据映射器接口到你的 service 层 bean 中 -->
+    <!-- 当使用映射器时,你仅仅如调 用你的 DAO 一样调用它们就可以了,但是你不需要编写任何 DAO 实现的代码,因为 MyBatis-Spring 将会为你创建代理 -->
+    <!-- 【前提条件】(要知道: 越自动化，便越被约束) -->
+    <!-- 1. mapper.xml的namespace是否是对应接口类的全名（包括包名和类名） -->
+    <!-- 2. mapper接口类和mapper.xml是否在同一个包下，文件名称是否一致（仅后缀不同） -->
+    <!-- 3. mapper接口类的方法名是否与mapper.xml中sql标签的id相同 -->
+    <!-- 4. mapper.xml文件中用resultMap，而不用resultType（当sql操作结果是List或其他复杂结果集时） -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <!-- annotationClass: 实际上就是起到过滤的作用，若设置了该属性，则: MyBatis的接口只有包含该注解，才会被扫描进去。 -->
+        <!--<property name="annotationClass" value="XXX"/>-->
+        <!-- sqlSessionFactoryBeanName: 一般都用不到，只有当你配置多数据源的时候，这是会有多个sqlSessionFactory，你就需要通过该属性来指定哪一个sqlSessionFactory（值为SqlSessionFactoryBean <bean>配置中的id属性） -->
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+        <!-- basePackage: 最常用属性; 可写多个，可用,;\t\n进行分割。每一个路径都可用直接的包路径，或Ant风格表达式 -->
+        <property name="basePackage" value="cn.johnnyzen.study.ssm.passwordbook"/>
+    </bean>
+
+    <!-- 【Spring 与 Mybatis 整合方式 5 - 借助基于mybatis的第三方工具 tkmybatis -->
+    <!-- step1 : public interface WorkerMapper extends Mapper<Worker> -->
+    <!-- step2 : xxxMapper.xml映射文件（非强制，如果要添加自己的查询方法才需要存在） -->
+    <!--  -->
+</beans>

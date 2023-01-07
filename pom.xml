@@ -17,33 +17,42 @@
     <modules>
         <!--        <module>Test-All</module>-->
         <module>common-support</module>
-        <module>study-springmvc</module>
+
+        <module>study-data-structure-and-algorithm</module>
+        <module>study-design-patterns</module>
+
+        <!-- study-spring: 独立的子工程，非父工程的子模块 -->
+        <!--<module>study-spring</module>-->
         <module>study-springmvc</module>
         <!--        <module>SpringMVC-Spring-MyBatis</module>-->
-        <!--        <module>study-design-patterns</module>-->
+
         <!--        <module>study-springboot-mybatisplus</module>-->
         <!--        <module>study-swagger</module>-->
         <!--        &lt;!&ndash; ↓ SSM Demo Project ↓ &ndash;&gt;-->
-        <!--        <module>password-book-app</module>-->
-        <!--        <module>kettle-sample</module>-->
-        <!--        <module>canal-sample</module>-->
+
         <!--        <module>study-javase</module>-->
         <!--        <module>study-hive</module>-->
         <!--        <module>study-ssm</module>-->
         <!--        <module>study-scala</module>-->
-        <!--        <module>study-spark</module>-->
+        <module>study-spark</module>
         <!--        <module>study-kafka</module>-->
-        <!--        <module>bigdata-datasets</module>-->
         <!--        <module>study-feign</module>-->
+
+        <module>study-kettle</module>
+        <module>study-canal</module>
+        <module>bigdata-datasets</module>
+
+        <module>password-book-app</module>
     </modules>
 
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.build.outputEncoding>UTF-8</project.build.outputEncoding>
-        <java.version>1.8</java.version>
+        <cn.johnnyzen.encoding>UTF-8</cn.johnnyzen.encoding>
+        <project.build.sourceEncoding>${cn.johnnyzen.encoding}</project.build.sourceEncoding>
+        <project.build.outputEncoding>${cn.johnnyzen.encoding}</project.build.outputEncoding>
 
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <java.version>1.8</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
 
         <!--
             这个属性被3个插件使用，跳过 testResources / testCompile / test 。不处理测试，会快一点。
@@ -63,7 +72,7 @@
         <maven-surefire-plugin.version>2.22.1</maven-surefire-plugin.version>
         <maven-jar-plugin.version>3.0.2</maven-jar-plugin.version>
         <maven-install-plugin.version>2.5.2</maven-install-plugin.version>
-        <maven-deploy-plugin-version>2.8.2</maven-deploy-plugin-version>
+        <maven-deploy-plugin.version>2.8.2</maven-deploy-plugin.version>
         <maven-site-plugin.version>3.7.1</maven-site-plugin.version>
         <maven-project-info-reports-plugin.version>3.0.0</maven-project-info-reports-plugin.version>
 
@@ -79,6 +88,8 @@
         <xml-apis.version>1.4.01</xml-apis.version>
 
         <commons-lang.version>2.6</commons-lang.version>
+        <commons-lang3.version>3.4</commons-lang3.version>
+
         <commons-beanutils.version>1.9.3</commons-beanutils.version>
         <commons-collections.version>3.2</commons-collections.version>
         <commons-fileupload.version>1.3.1</commons-fileupload.version>
@@ -118,6 +129,7 @@
         <clickhouse.jdbc.version>0.3.2</clickhouse.jdbc.version>
         <neo4j.jdbc.version>4.2.0</neo4j.jdbc.version>
         <kafka.clients.version>2.4.1</kafka.clients.version>
+        <kafka-streams.version>2.5.1</kafka-streams.version>
 
         <druid.dbpool.version>1.0.9</druid.dbpool.version>
 

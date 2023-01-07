@@ -1,0 +1,11 @@
+share:
+  wechat:
+    title: 这个APP竟然这么棒
+    content: 还不快来加入我们旅游派对
+    link:
+      android: "https://www.666.com/salesman/shareRegister?android&userToken="
+      ios: "https://www.666.com/salesman/shareRegister?ios&userToken="
+    imageUrl:
+      android: android wechat img url
+      ios: ios wechat img url
+  shareType: cn.johnnyzen.strategy.appShare.wechatStrategy.WechatShare

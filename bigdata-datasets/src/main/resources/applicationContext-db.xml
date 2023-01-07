@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+       xmlns:cache="http://www.springframework.org/schema/cache"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/task
+        http://www.springframework.org/schema/tx/spring-task.xsd
+        http://www.springframework.org/schema/jdbc
+        http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
+        http://www.springframework.org/schema/cache
+        http://www.springframework.org/schema/cache/spring-cache.xsd
+        http://www.springframework.org/schema/util
+        http://www.springframework.org/schema/util/spring-util.xsd">
+    <!-- 引入外部配置文件 => 加载 jdbc.properties 数据库连接配置 -->
+    <!--<context:property-placeholder location="classpath:/db/jdbc.properties"/>-->
+    <bean id="propertyConfigurer"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <!-- 配置资源文件 -->
+        <property name="location" value="classpath:/db/jdbc.properties"/>
+        <!--        <property name="locations">
+            <list>
+                <value>classpath:log4j.properties</value>
+            </list>
+        </property>-->
+    </bean>
+
+    <!-- Spring 根据 jdbc.properties 实例化(不同数据库连接池框架下的)数据源对象 dataSource
+        C390 - com.mchange.v2.c3p0.ComboPooledDataSource
+        Druid - com.alibaba.druid.pool.DruidDataSource
+        DBCP - org.apache.commons.dbcp.BasicDataSource -->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
+          destroy-method="close">
+        <property name="driverClassName" value="${jdbc.driver}" />
+        <property name="url" value="${jdbc.url}" />
+        <property name="username" value="${jdbc.username}" />
+        <property name="password" value="${jdbc.password}" />
+        <!-- 初始化连接大小 -->
+        <property name="initialSize" value="${jdbc.initialSize}"></property>
+        <!-- 连接池最大数量 -->
+        <property name="maxActive" value="${jdbc.maxActive}"></property>
+        <!-- 连接池最大空闲 -->
+        <!--<property name="maxIdle" value="${jdbc.maxIdle}"></property>-->
+        <!-- 连接池最小空闲 -->
+        <!--<property name="minIdle" value="${jdbc.minIdle}"></property>-->
+        <!-- 获取连接最大等待时间 -->
+        <property name="maxWait" value="${jdbc.maxWait}"></property>
+    </bean>
+
+    <!-- 开启 Spring 数据库事务 -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="insert*" propagation="REQUIRED"  rollback-for="Exception"/>
+            <tx:method name="add*" propagation="REQUIRED"  rollback-for="Exception"/>
+            <tx:method name="create*" propagation="REQUIRED"  rollback-for="Exception"/>
+
+            <tx:method name="save" propagation="REQUIRED" rollback-for="Exception"/>
+
+            <tx:method name="update*" propagation="REQUIRED"  rollback-for="Exception"/>
+
+            <tx:method name="delete*" propagation="REQUIRED"  rollback-for="Exception"/>
+
+            <tx:method name="get*" propagation="SUPPORTS" isolation="DEFAULT" read-only="true" />
+            <tx:method name="find*" propagation="SUPPORTS" isolation="DEFAULT" read-only="true" />
+            <tx:method name="select*" propagation="SUPPORTS" isolation="DEFAULT" read-only="true" />
+
+            <!--<tx:method name="*" propagation="REQUIRED" rollback-for="java.lang.Exception" />-->
+        </tx:attributes>
+    </tx:advice>
+    <!-- 用 切点 把 事务 切进去 -->
+    <aop:config>
+        <!-- pointcut元素定义1个切入点，execution中的第一个星号 用以匹配方法的返回类型，
+        这里星号表明匹配所有返回类型。 com.abc.dao.*.*(..) 表明 匹配 com.abc.dao 包下的所有类的所有方法 -->
+        <aop:pointcut id="dbTxPointcut" expression="execution(* cn.johnnyzen.study.ssm.passwordbook.*.*(..))" />
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="dbTxPointcut" />
+    </aop:config>
+
+    <!-- [可选] 根据 dataSource Bean，实例化 spring 框架自带的 DAO 层框架之一的对象 ———— jdbcTemplate -->
+    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <!-- [可选] 引入自定义的 BaseDao Bean -->
+    <!--<bean id="baseJdbcDao" class="com.sefon.common.jdbc.dao.BaseJdbcDaoImpl"/>-->
+
+</beans>

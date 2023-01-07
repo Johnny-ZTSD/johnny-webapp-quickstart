@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration><!-- Mybatis配置文件的根元素 -->
+    <!-- 属性(文件)配置 -->
+    <properties resource="db/jdbc.properties">
+        <!-- 相同属性:最高优先级的属性是那些作为方法参数的，然后是资源/url 属性，最后是 properties元素中指定的属性 -->
+        <!--        <property name="username" value="johnny"/> -->
+        <!--        <property name="password" value="johnnyzt0811"/> -->
+        <!-- <property name="jdbc.dialect" value="mysql"/> -->
+    </properties>
+
+    <!-- 全局配置参数，需要时再设置 -->
+    <settings>
+        <!--在使用MyBatis嵌套查询方式进行关联查询时，使用延迟加载可在一定程度上提高查询效率-->
+        <!-- 打开延迟加载的开关 -->
+        <setting name="lazyLoadingEnabled" value="true"/>
+        <!-- 将积极加载改为消极加载(即 按需加载) -->
+        <setting name="aggressiveLazyLoading" value="false"/>
+
+        <!-- 开启二级缓存 -->
+        <setting name="cacheEnabled" value="true"/>
+
+        <!-- 开启驼峰命名转换 从数据库列名 A_COLUMN 到经典 Java 属性名 aColumn 的类似映射-->
+        <!-- Table{create_time} -> Entity{createTime} -->
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+
+        <!-- 日志(LOG4J)中 打印 SQL 语句 (参考文献: MyBatis控制台显示SQL语句的方法) -->
+        <!-- STDOUT_LOGGING: 标准输出(控制台) -->
+        <setting name="logImpl" value="STDOUT_LOGGING"/>
+
+        <!-- 使用jdbc的getGeneratedKeys获取数据库自增主键值 -->
+        <setting name="useGeneratedKeys" value="true" />
+
+        <!-- 使用列别名替换列名 默认:true -->
+        <setting name="useColumnLabel" value="true" />
+
+        <setting name="autoMappingBehavior" value="PARTIAL" />
+        <setting name="defaultExecutorType" value="SIMPLE" />
+        <setting name="defaultStatementTimeout" value="2500" />
+        <setting name="safeRowBoundsEnabled" value="false" />
+        <setting name="mapUnderscoreToCamelCase" value="false" />
+        <setting name="localCacheScope" value="SESSION" />
+        <setting name="jdbcTypeForNull" value="OTHER" />
+        <setting name="lazyLoadTriggerMethods" value="equals,clone,hashCode,toString" />
+    </settings>
+
+    <plugins>
+        <!-- com.github.pagehelper为PageHelper类所在包名 -->
+        <plugin interceptor="com.github.pagehelper.PageHelper">
+            <property name="dialect" value="mysql"/>
+            <!-- 该参数默认为false -->
+            <!-- 设置为true时，会将RowBounds第一个参数offset当成pageNum页码使用 -->
+            <!-- 和startPage中的pageNum效果一样-->
+            <property name="offsetAsPageNum" value="true"/>
+            <!-- 该参数默认为false -->
+            <!-- 设置为true时，使用RowBounds分页会进行count查询 -->
+            <property name="rowBoundsWithCount" value="true"/>
+            <!-- 设置为true时，如果pageSize=0或者RowBounds.limit = 0就会查询出全部的结果 -->
+            <!-- （相当于没有执行分页查询，但是返回结果仍然是Page类型）-->
+            <property name="pageSizeZero" value="true"/>
+            <!-- 3.3.0版本可用 - 分页参数合理化，默认false禁用 -->
+            <!-- 启用合理化时，如果pageNum<1会查询第一页，如果pageNum>pages会查询最后一页 -->
+            <!-- 禁用合理化时，如果pageNum<1或pageNum>pages会返回空数据 -->
+            <property name="reasonable" value="false"/>
+            <!-- 3.5.0版本可用 - 为了支持startPage(Object params)方法 -->
+            <!-- 增加了一个`params`参数来配置参数映射，用于从Map或ServletRequest中取值 -->
+            <!-- 可以配置pageNum,pageSize,count,pageSizeZero,reasonable,不配置映射的用默认值 -->
+            <!-- 不理解该含义的前提下，不要随便复制该配置 -->
+            <property name="params" value="pageNum=start;pageSize=limit;"/>
+            <property name="supportMethodsArguments" value="false"/>
+            <property name="returnPageInfo" value="none"/>
+        </plugin>
+    </plugins>
+
+    <!-- 别名定义 type：类型的路径 alias：别名-->
+    <!--    <typeAliases>-->
+    <!--        <typeAlias alias="User" type="cn.johnnyzen.hiyusite.user.domain.User"/>-->
+    <!--    </typeAliases>-->
+
+    <!-- 环境配置 即 配置连接的数据库-->
+    <!-- ↓与Spring整合后，↓数据源的配置亦不可取消
+          (∵自己造的工具类MappUtil需要依赖<environment>创建SqlSession)-->
+    <environments default="development">
+        <environment id="development">
+            <!--配置Mybatis的事务管理，指定事务管理的类型 type=JDBC:采用Java JDBC的事务管理 -->
+            <transactionManager type="JDBC"></transactionManager>
+            <!-- 数据源配置 dataSource:连接源配置 POOLED:JDBC连接对象的数据源连接池的实现 -->
+            <dataSource type="POOLED">
+                <property name="driver" value="${jdbc.driver}"/>
+                <property name="url" value="${jdbc.url}"/>
+                <property name="username" value="${jdbc.username}"/>
+                <property name="password" value="${jdbc.password}"/>
+                <!--                <property name="driver" value="com.mysql.jdbc.Driver"/>-->
+                <!--                <property name="url" value="jdbc:mysql//johnnyzen.cn:3306/HiyuSite"/>-->
+                <!--                <property name="username" value="johnny"/>-->
+                <!--                <property name="password" value="johnnyzt0811"/>-->
+            </dataSource>
+        </environment>
+    </environments>
+
+    <!--告知Mybatis去哪找持久化类的映射文件 -->
+    <!--对于在src下的文件直接写文件名。若在某包下，则要写明路径,如：com/mybatistest/config/UserMapper.xml -->
+    <!--若XXMapper接口和mapper(XML)文件不在同一包下:不能进行自动扫描解析,需对接口和XML文件分别配置 -->
+    <mappers>
+        <!-- class 级别的指定 -->
+        <!--<mapper class="cn.johnnyzen.study.ssm.passwordbook.user.mapper.UserMapper"/>-->
+
+        <!-- 扫描路径下的mapper映射文件 -->
+        <!--<mapper resource="cn/johnnyzen/study/ssm/passwordbook/user/mapper/UserMapper.xml"/>-->
+
+        <!-- 扫描包下的接口文件 -->
+        <package name="cn.johnnyzen.dataset.bigdata"/>
+    </mappers>
+
+</configuration>

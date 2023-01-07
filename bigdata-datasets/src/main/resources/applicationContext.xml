@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+       xmlns:cache="http://www.springframework.org/schema/cache"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/task
+        http://www.springframework.org/schema/tx/spring-task.xsd
+        http://www.springframework.org/schema/jdbc
+        http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
+        http://www.springframework.org/schema/cache
+        http://www.springframework.org/schema/cache/spring-cache.xsd
+        http://www.springframework.org/schema/util
+        http://www.springframework.org/schema/util/spring-util.xsd">
+
+
+
+    <!-- 1 开启spring注解，扫描spring注解所在的包 -->
+    <context:component-scan base-package="cn.johnnyzen.dataset.bigdata.medical.csv2mysql"/>
+
+    <!-- 2 加载 springmvc -->
+    <!--<import resource="springmvc-servlet.xml" />-->
+
+    <!-- 3 加载 aop or 拦截策略 -->
+    <import resource="applicationContext-aop.xml"/>
+
+    <!-- 4 实例化线程池对象 threadPoolTaskExecutor ： ThreadPoolTaskExecutor是Spring提供的线程池，通过配置参数初始化线程池，随取随用，不需要创建和销毁。-->
+    <bean id="threadPoolTaskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+        <property name="corePoolSize" value="50"/>
+        <property name="maxPoolSize" value="50"/>
+        <property name="keepAliveSeconds" value="300"/>
+    </bean>
+
+    <!-- 5 事务/Serivce -->
+    <import resource="applicationContext-tx.xml"/>
+
+    <!-- 6 数据源 + mybatis -->
+    <import resource="applicationContext-db.xml"/>
+    <import resource="applicationContext-mybatis.xml"/>
+
+    <!-- 7 加载其他的 spring 配置文件-->
+    <import resource="applicationContext-*.xml"/>
+    <!-- classpath: Intelij IDEA中添加 resources 文件夹为资源文件:
+            选中 'resources'文件夹>右键>【Mark Directory as】>【Resources Root】
+            [参考文献: IDEA添加配置文件到classpath - 博客园](https://www.cnblogs.com/acm-bingzi/p/idea-classpath.html) -->
+    <!-- classpath: WEB-INF文件夹下的classes目录, 只会到class路径中查找找文件 -->
+    <!-- classpath*: WEB-INF文件夹下的classes目录, 不仅包含class路径，还包括jar文件中[class路径]进行查找 -->
+    <!--             classpath*:需遍历所有classpath，故而加载很慢，尽量避免使用classpath* -->
+    <!-- https://www.cnblogs.com/EasonJim/p/6709314.html -->
+    <!--<import resource="classpath:applicationContext-xxyyzz.xml"/>-->
+
+    <!-- 8 加载资源文件 -->
+    <!--<context:property-placeholder location="classpath:/db/jdbc.properties" />-->
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <!-- 配置资源文件 -->
+        <property name="locations">
+            <list>
+                <!--<value>classpath:/db/jdbc.properties</value>-->
+                <value>classpath:log4j.properties</value>
+            </list>
+        </property>
+    </bean>
+</beans>

@@ -16,7 +16,7 @@
     <mvc:annotation-driven />
 
     <!-- 扫描指定的包路径：进行包的扫描，去看类上面是否有相应的标签配置：@Component、@Controller、@Service、@Repository -->
-    <context:component-scan base-package="cn.johnnyzen.study.springmvc.*"/>
+    <context:component-scan base-package="cn.johnnyzen.study.springmvc"/>
 
     <!-- 1. 配置处理器映射器 将bean的name作为url进行查找，需要在配置Handler时指定bean name（就是url） -->
     <bean class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping" />
