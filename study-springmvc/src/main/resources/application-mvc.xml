@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context.xsd
+    http://www.springframework.org/schema/mvc
+    http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <!-- 开启静态资源的访问 -->
+    <mvc:default-servlet-handler />
+
+    <!--开启 SpringMVC 对注解的支持-->
+    <mvc:annotation-driven />
+
+    <!-- 扫描指定的包路径：进行包的扫描，去看类上面是否有相应的标签配置：@Component、@Controller、@Service、@Repository -->
+    <context:component-scan base-package="cn.johnnyzen.study.springmvc.*"/>
+
+    <!-- 1. 配置处理器映射器 将bean的name作为url进行查找，需要在配置Handler时指定bean name（就是url） -->
+    <bean class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping" />
+    <!-- 2. 配置处理器适配器，所有适配器都得实现 HandlerAdapter接口 -->
+    <bean class="org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter" />
+    <!-- 3. 配置Handler -->
+    <bean name="/hello.do" class="cn.johnnyzen.study.springmvc.HelloController" />
+
+    <!-- 配置视图解析器 -->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <!-- 返回视图页面的前缀 不能写成 /WEB-INF/jsp，最后的"/"一定要写-->
+        <property name="prefix" value="/WEB-INF/views/"></property>
+        <!-- 返回页面的后缀 -->
+        <property name="suffix" value=".jsp"></property>
+    </bean>
+
+</beans>

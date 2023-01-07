@@ -1,75 +1,266 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>johnny-webapp-quickstart</artifactId>
+        <groupId>cn.johnnyzen</groupId>
+        <version>1.0.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
 
-  <groupId>cn.johnnyzen</groupId>
-  <artifactId>study-springmvc</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
+    <artifactId>study-springmvc</artifactId>
+    <packaging>war</packaging>
 
-  <name>study-springmvc</name>
-  <!-- FIXME change it to the project's website -->
-  <url>http://www.example.com</url>
+    <name>study-springmvc</name>
+    <url>http://maven.apache.org</url>
 
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>1.7</maven.compiler.source>
-    <maven.compiler.target>1.7</maven.compiler.target>
-  </properties>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
-  <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.11</version>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
 
-  <build>
-    <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
-      <plugins>
-        <!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
-        <plugin>
-          <artifactId>maven-clean-plugin</artifactId>
-          <version>3.1.0</version>
-        </plugin>
-        <!-- default lifecycle, jar packaging: see https://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_jar_packaging -->
-        <plugin>
-          <artifactId>maven-resources-plugin</artifactId>
-          <version>3.0.2</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.8.0</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-surefire-plugin</artifactId>
-          <version>2.22.1</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-jar-plugin</artifactId>
-          <version>3.0.2</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-install-plugin</artifactId>
-          <version>2.5.2</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-deploy-plugin</artifactId>
-          <version>2.8.2</version>
-        </plugin>
-        <!-- site lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#site_Lifecycle -->
-        <plugin>
-          <artifactId>maven-site-plugin</artifactId>
-          <version>3.7.1</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-project-info-reports-plugin</artifactId>
-          <version>3.0.0</version>
-        </plugin>
-      </plugins>
-    </pluginManagement>
-  </build>
+        <!-- web project基本配置 -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>${javax.servlet-api.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet.jsp</groupId>
+            <artifactId>jsp-api</artifactId>
+            <version>${jsp-api.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>jstl</groupId>
+            <artifactId>jstl</artifactId>
+            <version>${jstl.version}</version>
+        </dependency>
+
+        <!-- 核心容器 之 spring-core -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <!-- 核心容器 之 spring-beans -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-beans</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <!-- 核心容器 之 spring-context -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <!-- 核心容器 之 spring-context-support -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <!-- 核心容器 之 spring-expression -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-expression</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
+        <!-- spring web -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <!-- spring web mvc -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
+        <!-- 引入子模块 -->
+        <dependency>
+            <groupId>cn.johnnyzen</groupId>
+            <artifactId>common-support</artifactId>
+            <version>${parent.version}</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-compiler-plugin</artifactId>-->
+<!--                <version>${maven-compiler-plugin.version}</version>-->
+<!--                <configuration>-->
+<!--                    <source>${maven.compiler.source}</source>-->
+<!--                    <target>${maven.compiler.target}</target>-->
+<!--                </configuration>-->
+<!--            </plugin>-->
+            <!-- @reference-doc:
+                [1] maven打包war配置 - CSDN - https://blog.csdn.net/DearYumu/article/details/118899919
+                [2] https://blog.csdn.net/hkdgxyj/article/details/119564876 - CSDN - https://blog.csdn.net/hkdgxyj/article/details/119564876
+                [3] Maven-war-plugin插件 - CSDN - https://blog.csdn.net/qq_35972907/article/details/106389587
+                [4] https://stackoverflow.com/questions/24291299/why-is-maven-war-plugin-failing-for-web-xml-missing-if-i-configured-it-not-to-fa
+            -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>${maven-war-plugin.version}</version>
+                <configuration>
+                    <warName>${artifactId}-${version}</warName>
+
+                    <!-- 启用 attachClasses 选项：可以把JAR文件（study-springmvc-1.0.0-SNAPSHOT-classes.jar）和标准的WAR文件同时安装到Maven仓库中
+                        true:
+                            target/study-springmvc-1.0.0-SNAPSHOT-classes.jar : 有
+                        false:
+                            target/study-springmvc-1.0.0-SNAPSHOT-classes.jar : 无
+                    -->
+                    <attachClasses>true</attachClasses>
+
+                    <!-- <classesClassifier>api</classesClassifier> -->
+
+                    <!-- <archive>：要使用的存档配置。参见:
+                        [1] [Maven Archiver 参考资料 - apache maven](https://maven.apache.org/shared/maven-archiver/index.html) -->
+                    <archive>
+                        <addMavenDescriptor>true</addMavenDescriptor>
+                        <compress/>
+                        <forced/>
+                        <index/>
+                        <pomPropertiesFile/>
+                        <manifestFile/>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <addDefaultEntries/>
+                            <addDefaultImplementationEntries/>
+                            <addDefaultSpecificationEntries/>
+                            <addBuildEnvironmentEntries/>
+                            <addExtensions/>
+                            <classpathLayoutType/>
+                            <classpathPrefix/>
+                            <customClasspathLayout/>
+                            <mainClass/>
+                            <packageName/>
+                            <useUniqueVersions/>
+                        </manifest>
+                        <manifestEntries>
+                            <!-- <key-name>value</key-name> -->
+                            <Implementation-Build>build-at-${maven.build.timestamp}</Implementation-Build>
+                            <Implementation-Title>${project.name}</Implementation-Title>
+                            <Built-By>${user.name}</Built-By>
+                            <Built-OS>${os.name}</Built-OS>
+                            <Build-Date>${maven.build.timestamp}</Build-Date>
+                        </manifestEntries>
+                        <manifestSections>
+                            <manifestSection>
+                                <name>manifest-section-test-name</name>
+                                <manifestEntries>
+                                    <!-- <key-name>value</key-name> -->
+                                </manifestEntries>
+                            </manifestSection>
+                        </manifestSections>
+                    </archive>
+
+                    <!-- 指定 web.xml 的路径  -->
+                    <webXml>src/main/webapp/WEB-INF/web.xml</webXml>
+
+                    <!-- 生成的 WAR 文件的目录, 默认为 ${project.build.directory} -->
+                    <outputDirectory>${project.build.directory}</outputDirectory>
+                    <!-- 用于在 WAR 中包含额外文件的单个目录。
+                            这是您放置 JSP 文件的地方。默认为 ${basedir}/src/main/webapp -->
+                    <warSourceDirectory>${basedir}/src/main/webapp</warSourceDirectory>
+                    <!-- <webappDirectory> 指定解压形式的 WAR 的默认输出目录
+                        默认为 ${project.build.directory}/${project.build.finalName}
+                        可以是外部 Web 容器的部署目录以便直接运行，比如 Tomcat 的 webapps 目录 -->
+                    <!-- <webappDirectory>/sample/servlet/container/deploy/directory</webappDirectory> -->
+                    <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
+                    <!-- <workDirectory> 将所依赖的 WAR 包解压缩的输出目录（如果需要的话）。默认为 ${project.build.directory}/war/work -->
+                    <workDirectory>${project.build.directory}/war/work</workDirectory>
+
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+
+                    <!--
+                        相同点：
+                            packagingExcludes 与 webResources 均可以排除某些文件。
+                        不同点：
+                            packagingExcludes针对拷贝到target后的资源进行处理。
+                            webResources针对编译前的资源进行处理。
+                    -->
+                    <!-- <packagingExcludes>WEB-INF/classes/**/**</packagingExcludes> -->
+                    <!-- <webResources>：要传输的 Web 资源列表，通过若干个 <resource> 子元素来指定这样一个资源列表，每个资源使用相对于 pom.xml 文件的路径 -->
+                    <webResources>
+                        <resource>
+                            <directory>src/main/webapp</directory>
+<!--                            <filtering>false</filtering>-->
+<!--                            <includes>-->
+<!--                                <include>**/*</include>-->
+<!--                            </includes>-->
+                            <targetPath>./</targetPath>
+                        </resource>
+                        <resource>
+                            <!-- this is relative to the pom.xml directory -->
+                            <!-- <directory>resource</directory> -->
+                            <directory>src/main/resources</directory>
+                            <!-- 默认情况下，Web 资源(如: springmvc.xml 等程序配置文件)被复制到 WAR 的根目录。要覆盖默认目标目录，则需指定目标路径。 -->
+                            <targetPath>WEB-INF/classes</targetPath>
+
+                            <!-- 过滤资源（暂不常用，先略过） -->
+                            <filtering>false</filtering>
+                            <!-- the list has a default value of ** -->
+<!--                            <includes>-->
+<!--                                <include>**/*.xml</include>-->
+<!--                                <include>**/*.yml</include>-->
+<!--                                <include>**/*.yaml</include>-->
+<!--                                <include>**/*.properties</include>-->
+<!--                                <include>**/*.json</include>-->
+<!--                            </includes>-->
+                            <!-- there's no default value for this -->
+<!--                            <excludes>-->
+<!--                                <exclude>**/.jpg</exclude>-->
+<!--                                <exclude>**/.md</exclude>-->
+<!--                            </excludes>-->
+                        </resource>
+<!--                        <resource>
+                            <directory>${project.build.directory}/classes</directory>
+                            <includes>
+                            <include>**/*.properties</include>
+                            <include>**/*.xml</include>
+                            </includes>
+                        </resource>-->
+                    </webResources>
+                </configuration>
+            </plugin>
+        </plugins>
+
+<!--        <resources>-->
+<!--            <resource>-->
+<!--                <directory>src/main/java</directory>-->
+<!--                <includes>-->
+<!--                    <include>**/*.properties</include>-->
+<!--                    <include>**/*.xml</include>-->
+<!--                </includes>-->
+<!--                <filtering>false</filtering>-->
+<!--            </resource>-->
+<!--            <resource>-->
+<!--                <directory>src/main/resources</directory>-->
+<!--                <includes>-->
+<!--                    <include>**/*.properties</include>-->
+<!--                    <include>**/*.xml</include>-->
+<!--                </includes>-->
+<!--                <filtering>false</filtering>-->
+<!--            </resource>-->
+<!--        </resources>-->
+    </build>
 </project>

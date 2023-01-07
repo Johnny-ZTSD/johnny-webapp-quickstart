@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+          xmlns:javaee="http://java.sun.com/xml/ns/javaee"
+          xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+          version="2.4">
+    <!--定义了WEB应用的名字 -->
+    <display-name>displayName:study-springmvc</display-name>
+    <!--声明WEB应用的描述信息 -->
+    <description>this is a description</description>
+    <!--context-param 元素声明应用范围内的自定义初始化参数。-->
+<!--    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>contextConfigLocationValue></param-value>
+    </context-param>
+    <context-param>
+        <param-name>cluster</param-name>
+        <param-value>false</param-value>
+    </context-param>-->
+
+    <!-- 配置前端控制器 DispatcherServlet -->
+    <servlet>
+        <servlet-name>springmvc</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <!-- mvc配置文件的文件名以及目录 -->
+            <param-value>classpath:application-mvc.xml</param-value>
+        </init-param>
+    </servlet>
+
+
+    <servlet-mapping>
+        <servlet-name>springmvc</servlet-name>
+        <!-- /: 拦截一切文件, url-pattern 即 客户端访问本服务时的 request url -->
+        <url-pattern>/</url-pattern>
+
+        <!--<url-pattern>*.do</url-pattern>-->
+    </servlet-mapping>
+
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+        <welcome-file>index.htm</welcome-file>
+        <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
+
+    <error-page>
+        <error-code>99999</error-code>
+        <location>/resources/app/html/network-test.html</location>
+    </error-page>
+    <!-- eg: 访问 url http://localhost:8080/study-springmvc/ 时，将报: 404 -->
+    <error-page>
+        <error-code>404</error-code>
+        <location>/WEB-INF/views/notFound.jsp</location>
+    </error-page>
+    <error-page>
+        <exception-type>java.lang.NullPointerException</exception-type>
+        <location>/WEB-INF/views/null.jsp</location>
+    </error-page>
+    <error-page>
+        <exception-type>javax.servlet.ServletException</exception-type>
+        <location>/WEB-INF/views/errorHandler.jsp</location>
+    </error-page>
+</web-app>
